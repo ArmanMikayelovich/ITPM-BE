@@ -7,8 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //Bootstrap class
 public class Application {
 
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
+
 
 }
