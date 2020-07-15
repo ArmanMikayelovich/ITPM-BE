@@ -7,6 +7,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users_projects")
 @Data
+@Cacheable
+@org.hibernate.annotations.Cache(usage = org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE)
 public class UserProjectEntity {
 
     @Id

@@ -1,6 +1,7 @@
 package com.energizeglobal.itpm.model;
 
 import lombok.Data;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -10,6 +11,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Data
 public class UserEntity {
 
@@ -24,7 +27,7 @@ public class UserEntity {
     private String lastName;
 
     @CreationTimestamp
-    @Column(name = "registration_time",updatable = false)
+    @Column(name = "registration_time", updatable = false)
     private LocalDate registrationDate;
 
     @Column(name = "email", unique = true)
@@ -33,10 +36,9 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
-
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "publisher")
     private List<ProjectEntity> items = new ArrayList<>();
-
 
     @Column(name = "is_active")
     private Boolean isActive = false;

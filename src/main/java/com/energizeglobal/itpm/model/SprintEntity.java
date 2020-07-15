@@ -1,6 +1,7 @@
 package com.energizeglobal.itpm.model;
 
 import lombok.Data;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -11,6 +12,8 @@ import java.util.List;
 @Entity
 @Table(name = "sprints")
 @Data
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class SprintEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +34,7 @@ public class SprintEntity {
     @Column(name = "dead_line", updatable = false)
     private LocalDateTime deadLine;
 
-    @OneToMany(mappedBy = "sprintEntity",fetch = FetchType.LAZY)
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(mappedBy = "sprintEntity", fetch = FetchType.LAZY)
     private List<TaskEntity> taskEntityList = new ArrayList<>();
 }
