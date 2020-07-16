@@ -1,9 +1,10 @@
 package com.energizeglobal.itpm.model;
 
+import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-
+@Data
 @Entity
 @Table(name = "tasks")
 @Cacheable
