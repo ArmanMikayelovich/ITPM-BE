@@ -9,7 +9,7 @@ public class SprintDto {
 
     private Long id;
 
-    private Long projectId;
+    private String projectId;
 
     private Long creatorId;
 
