@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class TaskUserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,5 +1,6 @@
 package com.energizeglobal.itpm.service;
 
+import com.energizeglobal.itpm.model.CommentEntity;
 import com.energizeglobal.itpm.model.dto.CommentDto;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -16,4 +17,8 @@ public interface CommentService {
     CommentDto findById(Long commentId);
 
     Page<CommentDto> findAllByTaskId(Long taskId);
+
+    CommentEntity toEntity(CommentDto commentDto);
+
+    CommentDto toDto(CommentEntity commentEntity);
 }

@@ -17,6 +17,7 @@ import java.util.List;
 public class SprintEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

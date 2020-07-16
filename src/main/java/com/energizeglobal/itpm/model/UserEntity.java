@@ -18,7 +18,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", updatable = false)
     private Long id;
     @Column(name = "first_name")
     private String firstName;
@@ -30,7 +30,7 @@ public class UserEntity {
     @Column(name = "registration_time", updatable = false)
     private LocalDate registrationDate;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true,updatable = false)
     private String email;
 
     @Column(name = "password")

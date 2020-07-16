@@ -1,4 +1,4 @@
-package com.energizeglobal.itpm.model;
+package com.energizeglobal.itpm.model.dto;
 
 import lombok.Data;
 
