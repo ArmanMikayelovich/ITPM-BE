@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface TaskService {
+    TaskDto findById(Long taskId);
+
+    TaskEntity findEntityById(Long taskId);
 
     void addTaskToSprint(TaskDto taskDto);
 

@@ -2,44 +2,88 @@ package com.energizeglobal.itpm.service.impl;
 
 import com.energizeglobal.itpm.model.*;
 import com.energizeglobal.itpm.model.dto.*;
-import com.energizeglobal.itpm.service.Mapper;
+import com.energizeglobal.itpm.service.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
+@RequiredArgsConstructor
 public class MapperImpl implements Mapper {
+    private final UserService userService;
+    private final SprintService sprintService;
+    private final TaskService taskService;
+    private final ProjectService projectService;
+
     @Override
     public UserEntity map(UserDto userDto, UserEntity userEntity) {
-        return null;
+        userEntity.setId(userDto.getId());
+        userEntity.setEmail(userDto.getEmail());
+
+        userEntity.setFirstName(userDto.getFirstName());
+        userEntity.setLastName(userDto.getLastName());
+
+        userEntity.setIsActive(userDto.getIsActive());
+
+        userEntity.setPassword(userDto.getPassword());
+        return userEntity;
     }
 
     @Override
     public UserDto map(UserEntity userEntity, UserDto userDto) {
-        return null;
+        userDto.setId(userEntity.getId());
+        userDto.setEmail(userEntity.getEmail());
+        userDto.setFirstName(userEntity.getFirstName());
+        userDto.setLastName(userEntity.getLastName());
+        userDto.setIsActive(userEntity.getIsActive());
+        return userDto;
     }
 
     @Override
     public CommentEntity map(CommentDto commentDto, CommentEntity commentEntity) {
-        return null;
+        commentEntity.setId(commentDto.getId());
+        commentEntity.setPublisherUserEntity(userService.findEntityById(commentDto.getId()));
+        commentEntity.setTaskEntity(taskService.findEntityById(commentDto.getTaskId()));
+        commentEntity.setText(commentDto.getText());
+        commentEntity.setCreatedAt(commentDto.getCreatedAt());
+        return commentEntity;
     }
 
     @Override
     public CommentDto map(CommentEntity commentEntity, CommentDto commentDto) {
-        return null;
+        commentDto.setId(commentEntity.getId());
+        commentDto.setPublisherId(commentEntity.getPublisherUserEntity().getId());
+        commentDto.setTaskId(commentEntity.getTaskEntity().getId());
+        commentDto.setText(commentEntity.getText());
+        commentDto.setCreatedAt(commentEntity.getCreatedAt());
+        return commentDto;
     }
 
     @Override
     public ProjectEntity map(ProjectDto projectDto, ProjectEntity projectEntity) {
-        return null;
+        projectEntity.setId(projectDto.getId());
+        projectEntity.setName(projectDto.getName());
+        projectEntity.setDescription(projectDto.getDescription());
+        projectEntity.setPublisher(userService.findEntityById(projectDto.getPublisherId()));
+        return projectEntity;
     }
 
     @Override
     public ProjectDto map(ProjectEntity projectEntity, ProjectDto projectDto) {
-        return null;
+        projectDto.setId(projectEntity.getId());
+        projectDto.setName(projectEntity.getName());
+        projectDto.setDescription(projectEntity.getDescription());
+        projectDto.setPublisherId(projectEntity.getPublisher().getId());
+        projectDto.setCreatedAt(projectEntity.getCreatedAt());
+        return projectDto;
     }
 
     @Override
     public SprintEntity map(SprintDto sprintDto, SprintEntity sprintEntity) {
-        return null;
+        sprintEntity.setId(sprintDto.getId());
+        sprintEntity.setProjectEntity(projectService.findEntityById(sprintDto.getProjectId()));
+        sprintEntity.setCreatorUserEntity(userService.findEntityById(sprintDto.getCreatorId()));
+        sprintEntity.setDeadLine(sprintDto.getDeadLine());
+        return sprintEntity;
     }
 
     @Override
@@ -54,23 +98,43 @@ public class MapperImpl implements Mapper {
 
     @Override
     public TaskEntity map(TaskDto taskDto, TaskEntity taskEntity) {
-        return null;
+        taskEntity.setId(taskDto.getId());
+        taskEntity.setCreatorUserEntity(userService.findEntityById(taskDto.getCreatorId()));
+        taskEntity.setDescription(taskDto.getDescription());
+        taskEntity.setName(taskDto.getName());
+        taskEntity.setSprintEntity(sprintService.findEntityById(taskDto.getSpringId()));
+        taskEntity.setTaskType(taskDto.getTaskType());
+        return taskEntity;
     }
 
     @Override
     public TaskDto map(TaskEntity taskEntity, TaskDto taskDto) {
-        return null;
+        taskDto.setId(taskEntity.getId());
+        taskDto.setName(taskEntity.getName());
+        taskDto.setDescription(taskEntity.getDescription());
+        taskDto.setSpringId(taskEntity.getSprintEntity().getId());
+        taskDto.setCreatorId(taskEntity.getCreatorUserEntity().getId());
+        taskDto.setTaskType(taskEntity.getTaskType());
+        return taskDto;
     }
 
     @Override
     public UserProjectEntity map(UserProjectDto userProjectDto, UserProjectEntity userProjectEntity) {
-        return null;
+        userProjectEntity.setId(userProjectDto.getId());
+        userProjectEntity.setUserEntity(userService.findEntityById(userProjectDto.getUserId()));
+        userProjectEntity.setProjectEntity(projectService.findEntityById(userProjectDto.getProjectId()));
+        userProjectEntity.setRole(userProjectDto.getRole());
+        return userProjectEntity;
     }
 
     @Override
     public UserProjectDto map(UserProjectEntity userProjectEntity, UserProjectDto userProjectDto) {
-        return null;
+        userProjectDto.setId(userProjectEntity.getId());
+        userProjectDto.setUserId(userProjectEntity.getUserEntity().getId());
+        userProjectDto.setProjectId(userProjectEntity.getProjectEntity().getId());
+        userProjectDto.setRole(userProjectEntity.getRole());
+        return userProjectDto;
     }
 
-    public
+
 }

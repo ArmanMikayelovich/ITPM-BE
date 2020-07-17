@@ -29,7 +29,7 @@ public class ProjectEntity {
     @JoinColumn(name = "fk_publisher")
     private UserEntity publisher;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 

@@ -13,7 +13,9 @@ public interface ProjectService {
 
     void removeProject(String projectId);
 
-    ProjectDto findByProjectId(String projectId);
+    ProjectDto findById(String projectId);
+
+    ProjectEntity findEntityById(String projectId);
 
     Page<ProjectDto> findAllByUserId(Long userId);
 

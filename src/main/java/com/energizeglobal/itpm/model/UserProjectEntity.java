@@ -1,5 +1,6 @@
 package com.energizeglobal.itpm.model;
 
+import com.energizeglobal.itpm.model.enums.UserRole;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -24,6 +25,6 @@ public class UserProjectEntity {
     @JoinColumn(name = "fk_project_id")
     private ProjectEntity projectEntity;
 
-    @Column(name = "role")
-    private String role;
+    @Enumerated(value = EnumType.STRING)
+    private UserRole role;
 }

@@ -1,5 +1,6 @@
 package com.energizeglobal.itpm.model.dto;
 
+import com.energizeglobal.itpm.model.enums.UserRole;
 import lombok.Data;
 
 @Data
@@ -9,8 +10,8 @@ public class UserProjectDto {
 
     private Long userId;
 
-    private Long projectId;
+    private String projectId;
 
-    private String role;
+    private UserRole role;
 }
 
