@@ -1,6 +1,7 @@
 package com.energizeglobal.itpm.repository;
 
 import com.energizeglobal.itpm.model.ProjectEntity;
+import com.energizeglobal.itpm.model.UserEntity;
 import com.energizeglobal.itpm.model.UserProjectEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,5 +10,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserProjectRepository extends JpaRepository<UserProjectEntity, Long> {
+
     Page<UserProjectEntity> findAllByProjectEntity(ProjectEntity projectEntity, Pageable pageable);
+
+    Page<UserProjectEntity> findAllByUserEntity(UserEntity userEntity, Pageable pageable);
 }

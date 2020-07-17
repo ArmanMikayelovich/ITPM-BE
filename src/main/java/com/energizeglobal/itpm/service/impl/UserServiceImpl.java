@@ -11,6 +11,7 @@ import com.energizeglobal.itpm.service.ProjectService;
 import com.energizeglobal.itpm.service.UserService;
 import com.energizeglobal.itpm.util.exceptions.AlreadyExistsException;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
+import com.energizeglobal.itpm.util.exceptions.NotSupportedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
         final UserEntity userEntity = findEntityById(userDto.getUserId());
 
         if (!userDto.getEmail().equals(userEntity.getEmail())) {
-            throw new IllegalArgumentException("User can't change the email");
+            throw new NotSupportedException("User can't change the email");
         }
 
         mapper.map(userDto, userEntity);

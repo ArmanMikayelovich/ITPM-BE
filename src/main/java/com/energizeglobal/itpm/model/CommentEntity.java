@@ -16,15 +16,13 @@ public class CommentEntity {
     @Column(updatable = false)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "fk_user_id")
-    @Column(updatable = false)
     private UserEntity publisherUserEntity;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "fk_task_id")
-    @Column(updatable = false)
     private TaskEntity taskEntity;
 
     @Column(name = "text", length = 1500)

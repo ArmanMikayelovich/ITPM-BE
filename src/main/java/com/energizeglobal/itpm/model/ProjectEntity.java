@@ -3,6 +3,8 @@ package com.energizeglobal.itpm.model;
 import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,7 +27,7 @@ public class ProjectEntity {
     @Column(name = "description", length = 1000)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "fk_publisher")
     private UserEntity publisher;
 
@@ -35,5 +37,6 @@ public class ProjectEntity {
 
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "projectEntity")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<SprintEntity> sprintEntities = new ArrayList<>();
 }

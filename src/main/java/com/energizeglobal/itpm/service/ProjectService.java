@@ -3,6 +3,7 @@ package com.energizeglobal.itpm.service;
 import com.energizeglobal.itpm.model.ProjectEntity;
 import com.energizeglobal.itpm.model.dto.ProjectDto;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,10 +18,6 @@ public interface ProjectService {
 
     ProjectEntity findEntityById(String projectId);
 
-    Page<ProjectDto> findAllByUserId(Long userId);
-
-    ProjectEntity toEntity(ProjectDto projectDto);
-
-    ProjectDto toDto(ProjectEntity projectEntity);
+    Page<ProjectDto> findAllByUserId(Long userId, Pageable pageable);
 
 }

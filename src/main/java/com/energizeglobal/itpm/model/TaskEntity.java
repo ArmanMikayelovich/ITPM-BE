@@ -25,11 +25,11 @@ public class TaskEntity {
     @Column(name = "description", length = 1500)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "fk_user_id")
     private UserEntity creatorUserEntity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "fk_sprint_id")
     private SprintEntity sprintEntity;
 
