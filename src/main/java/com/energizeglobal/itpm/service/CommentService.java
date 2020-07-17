@@ -3,6 +3,7 @@ package com.energizeglobal.itpm.service;
 import com.energizeglobal.itpm.model.CommentEntity;
 import com.energizeglobal.itpm.model.dto.CommentDto;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,9 +17,7 @@ public interface CommentService {
 
     CommentDto findById(Long commentId);
 
-    Page<CommentDto> findAllByTaskId(Long taskId);
+    CommentEntity findEntityById(Long commentId);
 
-    CommentEntity toEntity(CommentDto commentDto);
-
-    CommentDto toDto(CommentEntity commentEntity);
+    Page<CommentDto> findAllByTaskId(Long taskId, Pageable pageable);
 }
