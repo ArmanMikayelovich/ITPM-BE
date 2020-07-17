@@ -16,7 +16,7 @@ public class MapperImpl implements Mapper {
 
     @Override
     public UserEntity map(UserDto userDto, UserEntity userEntity) {
-        userEntity.setId(userDto.getId());
+        userEntity.setId(userDto.getUserId());
         userEntity.setEmail(userDto.getEmail());
 
         userEntity.setFirstName(userDto.getFirstName());
@@ -30,7 +30,7 @@ public class MapperImpl implements Mapper {
 
     @Override
     public UserDto map(UserEntity userEntity, UserDto userDto) {
-        userDto.setId(userEntity.getId());
+        userDto.setUserId(userEntity.getId());
         userDto.setEmail(userEntity.getEmail());
         userDto.setFirstName(userEntity.getFirstName());
         userDto.setLastName(userEntity.getLastName());
@@ -63,7 +63,6 @@ public class MapperImpl implements Mapper {
         projectEntity.setId(projectDto.getId());
         projectEntity.setName(projectDto.getName());
         projectEntity.setDescription(projectDto.getDescription());
-        projectEntity.setPublisher(userService.findEntityById(projectDto.getPublisherId()));
         return projectEntity;
     }
 
@@ -72,7 +71,6 @@ public class MapperImpl implements Mapper {
         projectDto.setId(projectEntity.getId());
         projectDto.setName(projectEntity.getName());
         projectDto.setDescription(projectEntity.getDescription());
-        projectDto.setPublisherId(projectEntity.getPublisher().getId());
         projectDto.setCreatedAt(projectEntity.getCreatedAt());
         return projectDto;
     }
@@ -130,7 +128,13 @@ public class MapperImpl implements Mapper {
     @Override
     public UserProjectDto map(UserProjectEntity userProjectEntity, UserProjectDto userProjectDto) {
         userProjectDto.setId(userProjectEntity.getId());
+
         userProjectDto.setUserId(userProjectEntity.getUserEntity().getId());
+        userProjectDto.setEmail(userProjectEntity.getUserEntity().getEmail());
+        userProjectDto.setFirstName(userProjectEntity.getUserEntity().getFirstName());
+        userProjectDto.setLastName(userProjectEntity.getUserEntity().getLastName());
+        userProjectDto.setIsActive(userProjectEntity.getUserEntity().getIsActive());
+
         userProjectDto.setProjectId(userProjectEntity.getProjectEntity().getId());
         userProjectDto.setRole(userProjectEntity.getRole());
         return userProjectDto;

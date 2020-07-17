@@ -13,8 +13,6 @@ public class ProjectDto {
 
     private String description;
 
-    private Long publisherId;
-
     private LocalDateTime createdAt;
 
 }

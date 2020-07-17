@@ -2,7 +2,9 @@ package com.energizeglobal.itpm.service;
 
 import com.energizeglobal.itpm.model.UserEntity;
 import com.energizeglobal.itpm.model.dto.UserDto;
+import com.energizeglobal.itpm.model.dto.UserProjectDto;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,11 +17,9 @@ public interface UserService {
 
     UserEntity findEntityById(Long userId);
 
-    void deActivate(Long userId);
+    void changeActivationStatus(Long userId, Boolean status);
 
-    Page<UserDto> addAllUsersByProject(String projectId);
+    Page<UserProjectDto> findAllUsersByProject(String projectId, Pageable pageable);
 
-    UserEntity toEntity(UserDto userDto);
 
-    UserDto toDto(UserEntity userEntity);
 }
