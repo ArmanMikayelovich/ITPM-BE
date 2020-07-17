@@ -98,6 +98,9 @@ public class MapperImpl implements Mapper {
     public TaskEntity map(TaskDto taskDto, TaskEntity taskEntity) {
         taskEntity.setId(taskDto.getId());
         taskEntity.setCreatorUserEntity(userService.findEntityById(taskDto.getCreatorId()));
+        if (taskDto.getAssignedUserId() != null) {
+            taskEntity.setAssignedUserEntity(userService.findEntityById(taskDto.getAssignedUserId()));
+        }
         taskEntity.setDescription(taskDto.getDescription());
         taskEntity.setName(taskDto.getName());
         taskEntity.setSprintEntity(sprintService.findEntityById(taskDto.getSpringId()));
@@ -112,6 +115,9 @@ public class MapperImpl implements Mapper {
         taskDto.setDescription(taskEntity.getDescription());
         taskDto.setSpringId(taskEntity.getSprintEntity().getId());
         taskDto.setCreatorId(taskEntity.getCreatorUserEntity().getId());
+        if (taskEntity.getAssignedUserEntity() != null) {
+            taskDto.setAssignedUserId(taskEntity.getAssignedUserEntity().getId());
+        }
         taskDto.setTaskType(taskEntity.getTaskType());
         return taskDto;
     }

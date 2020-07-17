@@ -16,10 +16,6 @@ public interface TaskService {
 
     void changeTask(TaskDto taskDto);
 
-    void remote(TaskDto taskDto);
-
-    TaskEntity toEntity(TaskDto taskDto);
-
-    TaskDto toDto(TaskEntity taskEntity);
+    void remove(TaskDto taskDto);
 
 }

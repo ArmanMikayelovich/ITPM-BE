@@ -15,5 +15,7 @@ public class TaskDto {
 
     private Long creatorId;
 
+    private Long assignedUserId;
+
     private TaskType taskType;
 }
