@@ -1,4 +1,4 @@
-package com.energizeglobal.itpm.service.impl.api;
+package com.energizeglobal.itpm.api;
 
 import com.energizeglobal.itpm.model.dto.UserDto;
 import com.energizeglobal.itpm.model.dto.UserProjectDto;
