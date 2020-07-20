@@ -44,7 +44,8 @@ public class TaskController {
     @PutMapping(value = "/attach", consumes = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
             MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public void attachTaskToUser(@RequestParam("userId") Long userId, @RequestParam("taskId") Long taskId) {
+    public void attachTaskToUser(@RequestParam("userId") Long userId,
+                                 @RequestParam("taskId") Long taskId) {
         log.trace("attaching task: " + taskId + " to user: " + userId);
         taskService.attachTaskToUser(taskId, userId);
     }

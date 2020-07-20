@@ -10,8 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
@@ -40,10 +42,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteDto(CommentDto commentDto) {
-        final CommentEntity commentEntity = findEntityById(commentDto.getId());
+    public void delete(Long commentId) {
+        final CommentEntity commentEntity = findEntityById(commentId);
         commentRepository.delete(commentEntity);
-        log.trace("Comment deleted: " + commentDto);
+        log.trace("Comment deleted: " + commentId);
     }
 
     @Override

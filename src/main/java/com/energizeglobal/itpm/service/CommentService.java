@@ -13,7 +13,7 @@ public interface CommentService {
 
     void updateComment(CommentDto commentDto);
 
-    void deleteDto(CommentDto commentDto);
+    void delete(Long commentId);
 
     CommentDto findById(Long commentId);
 

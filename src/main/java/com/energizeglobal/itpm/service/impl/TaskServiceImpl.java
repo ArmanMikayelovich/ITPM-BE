@@ -10,10 +10,12 @@ import com.energizeglobal.itpm.service.UserService;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {

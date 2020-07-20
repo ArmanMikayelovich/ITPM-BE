@@ -3,16 +3,28 @@ package com.energizeglobal.itpm.service.impl;
 import com.energizeglobal.itpm.model.*;
 import com.energizeglobal.itpm.model.dto.*;
 import com.energizeglobal.itpm.service.*;
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 @Transactional
-@RequiredArgsConstructor
+
 public class MapperImpl implements Mapper {
     private final UserService userService;
     private final SprintService sprintService;
     private final TaskService taskService;
     private final ProjectService projectService;
+
+    public MapperImpl(@Lazy UserService userService,
+                      @Lazy SprintService sprintService,
+                      @Lazy TaskService taskService,
+                      @Lazy ProjectService projectService) {
+        this.userService = userService;
+        this.sprintService = sprintService;
+        this.taskService = taskService;
+        this.projectService = projectService;
+    }
 
     @Override
     public UserEntity map(UserDto userDto, UserEntity userEntity) {

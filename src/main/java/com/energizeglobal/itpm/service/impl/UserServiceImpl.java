@@ -13,16 +13,17 @@ import com.energizeglobal.itpm.service.UserService;
 import com.energizeglobal.itpm.util.exceptions.AlreadyExistsException;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
 import com.energizeglobal.itpm.util.exceptions.NotSupportedException;
-import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private static final Logger log = Logger.getLogger(UserServiceImpl.class);
 
@@ -30,6 +31,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ProjectService projectService;
     private final UserProjectRepository userProjectRepository;
+
+    public UserServiceImpl(Mapper mapper, UserRepository userRepository, @Lazy ProjectService projectService, UserProjectRepository userProjectRepository) {
+        this.mapper = mapper;
+        this.userRepository = userRepository;
+        this.projectService = projectService;
+        this.userProjectRepository = userProjectRepository;
+    }
 
     @Override
     @Transactional
@@ -78,7 +86,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity findEntityById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> {
+                .orElseGet(() -> {
                     log.warn("User with id:" + userId + " not found.");
                     throw new NotFoundException("User with id: " + userId + " not found.");
                 });

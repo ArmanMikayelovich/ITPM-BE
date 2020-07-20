@@ -36,7 +36,8 @@ public class ProjectController {
         log.trace("project updated : " + projectDto);
     }
 
-    @GetMapping(value = "/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = "/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE})
     public ProjectDto findById(@PathVariable("projectId") String projectId) {
         log.trace("Searching project by id: " + projectId);
         final ProjectDto byId = projectService.findById(projectId);

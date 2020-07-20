@@ -19,16 +19,17 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
             MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public void createUser(UserDto userDto) {
         log.trace("creating user:" + userDto);
         userService.createUser(userDto);
         log.trace("user created:" + userDto);
-
     }
 
-    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
             MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public void updateUser(UserDto userDto) {
         log.trace("updating user:" + userDto);
@@ -37,20 +38,24 @@ public class UserController {
 
     }
 
-    @GetMapping(value = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE})
     public UserDto findById(@PathVariable("userId") Long userId) {
         log.trace("searching user by id: " + userId);
         return userService.findById(userId);
     }
 
     @PutMapping(value = "/activation")
-    public void changeActivation(@RequestParam("userId") Long userId, @RequestParam("status") Boolean status) {
+    public void changeActivation(@RequestParam("userId") Long userId,
+                                 @RequestParam("status") Boolean status) {
         log.trace("changing activation status of user:" + userId + " to: " + status);
         userService.changeActivationStatus(userId, status);
     }
 
-    @GetMapping(value = "/by-project/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public Page<UserProjectDto> findAllByProjectId(@PathVariable("projectId") String projectId, @RequestParam final Pageable pageable) {
+    @GetMapping(value = "/by-project/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE})
+    public Page<UserProjectDto> findAllByProjectId(@PathVariable("projectId") String projectId,
+                                                   @RequestParam final Pageable pageable) {
         log.trace("searching users by project id: " + projectId + " || pagination: " + pageable);
         return userService.findAllUsersByProject(projectId, pageable);
     }

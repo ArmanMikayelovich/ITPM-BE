@@ -11,10 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SprintServiceImpl implements SprintService {
