@@ -38,17 +38,22 @@ public class ProjectController {
 
     @GetMapping(value = "/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ProjectDto findById(@PathVariable("projectId") String projectId) {
-        return projectService.findById(projectId);
+        log.trace("Searching project by id: " + projectId);
+        final ProjectDto byId = projectService.findById(projectId);
+        log.trace("Project with id: " + projectId + " found." + byId);
+        return byId;
     }
 
     @DeleteMapping(value = "/{projectId}")
     public void delete(@PathVariable("projectId") String projectId) {
-
         projectService.removeProject(projectId);
+        log.trace("project with id: " + projectId + " removed.");
+
     }
 
     @GetMapping(value = "/by-users/{userId}")
     public Page<ProjectDto> findAllByUser(@PathVariable("userId") Long userId, @RequestParam final Pageable pageable) {
+        log.trace("searching projects by userId: " + userId + " || pageable: " + pageable);
         return projectService.findAllByAssignedUserId(userId, pageable);
     }
 }

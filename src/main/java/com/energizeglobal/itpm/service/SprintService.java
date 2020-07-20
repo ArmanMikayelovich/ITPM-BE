@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 public interface SprintService {
     void addSprintToProject(SprintDto sprintDto);
 
-
     Page<SprintDto> findAllSprintsByProjectId(String projectId, Pageable pageable);
 
     void changeDeadLine(SprintDto sprintDto);
