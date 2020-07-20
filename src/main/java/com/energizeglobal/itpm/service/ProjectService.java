@@ -18,6 +18,6 @@ public interface ProjectService {
 
     ProjectEntity findEntityById(String projectId);
 
-    Page<ProjectDto> findAllByUserId(Long userId, Pageable pageable);
+    Page<ProjectDto> findAllByAssignedUserId(Long userId, Pageable pageable);
 
 }

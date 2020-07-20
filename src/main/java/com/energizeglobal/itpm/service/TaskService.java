@@ -16,6 +16,6 @@ public interface TaskService {
 
     void changeTask(TaskDto taskDto);
 
-    void remove(TaskDto taskDto);
+    void remove(Long taskId);
 
 }

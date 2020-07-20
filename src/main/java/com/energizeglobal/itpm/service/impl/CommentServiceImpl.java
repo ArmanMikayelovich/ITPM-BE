@@ -7,6 +7,7 @@ import com.energizeglobal.itpm.service.CommentService;
 import com.energizeglobal.itpm.service.Mapper;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
+    private static final Logger log = Logger.getLogger(CommentServiceImpl.class);
 
     private final Mapper mapper;
     private final CommentRepository commentRepository;
@@ -21,41 +23,58 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void createComment(CommentDto commentDto) {
+        log.trace("creating comment: " + commentDto);
         commentDto.setId(null);
-        final CommentEntity commentEntity = mapper.map(commentDto, new CommentEntity());
-        commentRepository.save(commentEntity);
+        CommentEntity commentEntity = mapper.map(commentDto, new CommentEntity());
+        commentEntity = commentRepository.save(commentEntity);
+        log.trace("comment created: " + commentEntity);
     }
 
     @Override
     public void updateComment(CommentDto commentDto) {
-        final CommentEntity commentEntity = findEntityById(commentDto.getId());
+        log.trace("Updating comment: " + commentDto);
+        CommentEntity commentEntity = findEntityById(commentDto.getId());
         mapper.map(commentDto, commentEntity);
-        commentRepository.save(commentEntity);
+        commentEntity = commentRepository.save(commentEntity);
+        log.trace(("comment updated: " + commentEntity));
     }
 
     @Override
     public void deleteDto(CommentDto commentDto) {
         final CommentEntity commentEntity = findEntityById(commentDto.getId());
         commentRepository.delete(commentEntity);
+        log.trace("Comment deleted: " + commentDto);
     }
 
     @Override
     public CommentDto findById(Long commentId) {
-        return null;
+        final CommentEntity commentEntity = findEntityById(commentId);
+        return mapper.map(commentEntity, new CommentDto());
     }
 
     @Override
     public CommentEntity findEntityById(Long commentId) {
-        return commentRepository
-                .findById(commentId)
-                .orElseThrow(() -> new NotFoundException("Comment with id: " + commentId + " not found."));
+        log.trace("Searching Comment by id: " + commentId);
+
+        try {
+            return commentRepository
+                    .findById(commentId)
+                    .orElseThrow(() -> new NotFoundException("Comment with id: " + commentId + " not found."));
+        } catch (Exception exception) {
+            log.error("Error in searching comment by id: " + commentId
+                    + " \n Error message: " + exception.getMessage());
+            throw exception;
+        }
     }
 
     @Override
     public Page<CommentDto> findAllByTaskId(Long taskId, Pageable pageable) {
         final CommentEntity commentEntity = findEntityById(taskId);
-        return commentRepository
-                .findAllByTaskEntity(commentEntity.getTaskEntity(), pageable)
+        log.trace("Searching comments by task id: " + taskId);
+        final Page<CommentEntity> commentEntityPage = commentRepository
+                .findAllByTaskEntity(commentEntity.getTaskEntity(), pageable);
+        log.trace("Found comments by task id: " + taskId + "|| count " + commentEntityPage.getTotalElements());
+        return commentEntityPage
                 .map(c -> mapper.map(c, new CommentDto()));
     }
 
