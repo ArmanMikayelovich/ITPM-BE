@@ -2,9 +2,9 @@ package com.energizeglobal.itpm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
-@SpringBootApplication
-//Bootstrap class
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class Application {
 
 
