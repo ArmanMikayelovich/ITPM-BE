@@ -18,15 +18,13 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping(value = "/comments/{commentId}", produces = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = "/comments/{commentId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public CommentDto findById(@PathVariable("commentId") Long commentId) {
         log.trace("Searching comment by id: " + commentId);
         return commentService.findById(commentId);
     }
 
-    @GetMapping(value = "{tasksId}/comments", produces = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = "{tasksId}/comments", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<CommentDto> findAllByTaskId(@PathVariable("tasksId") Long tasksId, @RequestParam Pageable pageable) {
         log.trace("Searching comments  by taskId: " + tasksId);
         return commentService.findAllByTaskId(tasksId, pageable);

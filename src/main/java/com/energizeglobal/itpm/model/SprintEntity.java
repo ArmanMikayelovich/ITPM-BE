@@ -1,21 +1,26 @@
 package com.energizeglobal.itpm.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+@XmlRootElement
 @Entity
 @Table(name = "sprints")
-@Data
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Getter
+@Setter
 public class SprintEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,4 +46,28 @@ public class SprintEntity {
     @OneToMany(mappedBy = "sprintEntity", fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<TaskEntity> taskEntityList = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SprintEntity that = (SprintEntity) o;
+        return Objects.equals(id, that.id) &&
+                (projectEntity != null && that.projectEntity != null ?
+                        projectEntity.getId().equals(that.projectEntity.getId())
+                        : Objects.equals(projectEntity, that.projectEntity)) &&
+
+                (creatorUserEntity != null && that.creatorUserEntity != null) &&
+                creatorUserEntity.getId().equals(that.creatorUserEntity.getId()) &&
+
+                Objects.equals(creatorUserEntity, that.creatorUserEntity) &&
+                Objects.equals(creationTimestamp, that.creationTimestamp) &&
+                Objects.equals(deadLine, that.deadLine) &&
+                Objects.equals(taskEntityList, that.taskEntityList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

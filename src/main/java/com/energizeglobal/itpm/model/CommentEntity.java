@@ -1,15 +1,20 @@
 package com.energizeglobal.itpm.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
+@XmlRootElement
 @Entity
 @Table(name = "comments")
-@Data
+@Getter
+@Setter
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +41,24 @@ public class CommentEntity {
     @Column(name = "update_timestamp")
     private LocalDateTime modified;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommentEntity that = (CommentEntity) o;
+
+        return Objects.equals(id, that.id) &&
+                ((publisherUserEntity != null && that.getPublisherUserEntity() != null) &&
+                        publisherUserEntity.getId().equals(that.getPublisherUserEntity().getId()))
+                &&
+                Objects.equals(taskEntity, that.taskEntity) &&
+                Objects.equals(text, that.text) &&
+                Objects.equals(createdAt, that.createdAt) &&
+                Objects.equals(modified, that.modified);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

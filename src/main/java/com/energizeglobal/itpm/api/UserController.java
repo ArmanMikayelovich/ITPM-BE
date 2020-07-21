@@ -38,8 +38,7 @@ public class UserController {
 
     }
 
-    @GetMapping(value = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public UserDto findById(@PathVariable("userId") Long userId) {
         log.trace("searching user by id: " + userId);
         return userService.findById(userId);
@@ -52,8 +51,7 @@ public class UserController {
         userService.changeActivationStatus(userId, status);
     }
 
-    @GetMapping(value = "/by-project/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = "/by-project/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<UserProjectDto> findAllByProjectId(@PathVariable("projectId") String projectId,
                                                    @RequestParam final Pageable pageable) {
         log.trace("searching users by project id: " + projectId + " || pagination: " + pageable);

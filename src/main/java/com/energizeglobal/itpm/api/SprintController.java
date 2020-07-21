@@ -36,8 +36,7 @@ public class SprintController {
         sprintService.changeDeadLine(sprintDto);
     }
 
-    @GetMapping(value = "/by-project/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = "/by-project/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<SprintDto> findAllByProjectId(@PathVariable("projectId") String projectId,
                                               @RequestParam Pageable pageable) {
         log.trace("searching sprints by project id: " + projectId + " || pageable: " + pageable);

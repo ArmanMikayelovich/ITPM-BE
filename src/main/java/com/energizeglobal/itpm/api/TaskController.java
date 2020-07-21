@@ -17,8 +17,7 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    @GetMapping(value = "/{taskId}", produces = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = "/{taskId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public TaskDto findById(@PathVariable("taskId") Long taskId) {
         log.trace("searching task by id: " + taskId);
         return taskService.findById(taskId);
