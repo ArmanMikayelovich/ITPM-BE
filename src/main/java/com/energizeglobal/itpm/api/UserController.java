@@ -19,19 +19,15 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public void createUser(UserDto userDto) {
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void createUser(@RequestBody UserDto userDto) {
         log.trace("creating user:" + userDto);
         userService.createUser(userDto);
         log.trace("user created:" + userDto);
     }
 
-    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public void updateUser(UserDto userDto) {
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void updateUser(@RequestBody UserDto userDto) {
         log.trace("updating user:" + userDto);
         userService.updateUser(userDto);
         log.trace("user updated:" + userDto);

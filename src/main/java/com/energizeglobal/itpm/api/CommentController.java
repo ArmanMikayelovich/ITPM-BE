@@ -32,20 +32,16 @@ public class CommentController {
 
 
     @PostMapping(value = "/{taskId}/comments",
-            consumes = {MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.APPLICATION_XML_VALUE,
-                    MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public void addComment(@PathVariable("taskId") Long taskId, CommentDto commentDto) {
+            consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void addComment(@PathVariable("taskId") Long taskId, @RequestBody CommentDto commentDto) {
         commentDto.setTaskId(taskId);
         log.trace("adding comment: " + commentDto);
         commentService.createComment(commentDto);
     }
 
     @PutMapping(value = "/{taskId}/comments",
-            consumes = {MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.APPLICATION_XML_VALUE,
-                    MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public void updateComment(@PathVariable("taskId") Long taskId, CommentDto commentDto) {
+            consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void updateComment(@PathVariable("taskId") Long taskId, @RequestBody CommentDto commentDto) {
         commentDto.setTaskId(taskId);
         log.trace("updating comment: " + commentDto);
         commentService.updateComment(commentDto);

@@ -24,25 +24,19 @@ public class TaskController {
     }
 
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public void addTaskToSprint(TaskDto taskDto) {
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void addTaskToSprint(@RequestBody TaskDto taskDto) {
         log.trace("adding task in sprint: " + taskDto);
         taskService.addTaskToSprint(taskDto);
     }
 
-    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public void updateTask(TaskDto taskDto) {
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void updateTask(@RequestBody TaskDto taskDto) {
         log.trace("updating task: " + taskDto);
         taskService.changeTask(taskDto);
     }
 
-    @PutMapping(value = "/attach", consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    @PutMapping(value = "/attach", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void attachTaskToUser(@RequestParam("userId") Long userId,
                                  @RequestParam("taskId") Long taskId) {
         log.trace("attaching task: " + taskId + " to user: " + userId);

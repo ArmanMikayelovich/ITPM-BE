@@ -18,19 +18,16 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public void createProject(ProjectDto projectDto) {
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,})
+    public void createProject(@RequestBody ProjectDto projectDto) {
         log.trace("creating project: " + projectDto);
         projectService.createProject(projectDto);
         log.trace("project created : " + projectDto);
 
     }
 
-    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public void updateProject(ProjectDto projectDto) {
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void updateProject(@RequestBody ProjectDto projectDto) {
         log.trace("updating project: " + projectDto);
         projectService.updateProject(projectDto);
         log.trace("project updated : " + projectDto);

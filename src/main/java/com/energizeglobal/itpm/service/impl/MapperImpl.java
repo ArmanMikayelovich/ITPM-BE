@@ -75,6 +75,7 @@ public class MapperImpl implements Mapper {
         projectEntity.setId(projectDto.getId());
         projectEntity.setName(projectDto.getName());
         projectEntity.setDescription(projectDto.getDescription());
+        projectEntity.setPublisher(userService.findEntityById(projectDto.getPublisherId()));
         return projectEntity;
     }
 
@@ -84,6 +85,7 @@ public class MapperImpl implements Mapper {
         projectDto.setName(projectEntity.getName());
         projectDto.setDescription(projectEntity.getDescription());
         projectDto.setCreatedAt(projectEntity.getCreatedAt());
+        projectDto.setPublisherId(projectEntity.getPublisher().getId());
         return projectDto;
     }
 

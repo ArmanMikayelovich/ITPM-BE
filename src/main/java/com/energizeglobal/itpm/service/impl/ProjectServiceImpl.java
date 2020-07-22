@@ -36,6 +36,7 @@ public class ProjectServiceImpl implements ProjectService {
     public void createProject(ProjectDto projectDto) {
         log.trace("creating Project: " + projectDto);
         projectDto.setCreatedAt(null);
+
         projectRepository.findById(projectDto.getId()).ifPresent(projectEntity -> {
             throw new AlreadyExistsException("Project with key: " + projectDto.getId() + " already exists.");
         });

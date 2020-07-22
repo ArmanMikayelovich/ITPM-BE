@@ -18,19 +18,15 @@ public class SprintController {
 
     private final SprintService sprintService;
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public void addSprint(SprintDto sprintDto) {
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void addSprint(@RequestBody SprintDto sprintDto) {
         log.trace("creating Sprint: " + sprintDto);
         sprintService.addSprintToProject(sprintDto);
     }
 
 
-    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public void changeDeadline(SprintDto sprintDto) {
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void changeDeadline(@RequestBody SprintDto sprintDto) {
         log.trace("Changing deadline of sprint with id: " + sprintDto
                 + " to " + sprintDto.getDeadLine());
         sprintService.changeDeadLine(sprintDto);
