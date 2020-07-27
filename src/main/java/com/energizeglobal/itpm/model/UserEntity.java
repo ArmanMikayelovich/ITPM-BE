@@ -1,5 +1,6 @@
 package com.energizeglobal.itpm.model;
 
+import com.energizeglobal.itpm.model.enums.AuthProvider;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -48,6 +49,12 @@ public class UserEntity {
 
     @Column(name = "is_active")
     private Boolean isActive = false;
+
+
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    private String providerId;
 
     //TODO add roles lastly
 
