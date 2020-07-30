@@ -2,18 +2,20 @@ package com.energizeglobal.itpm.security;
 
 import com.energizeglobal.itpm.config.ApplicationConfig;
 import io.jsonwebtoken.*;
-import lombok.AllArgsConstructor;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 @Service
-@AllArgsConstructor
+
 public class TokenProvider {
     private static final Logger log = Logger.getLogger(TokenProvider.class);
-
+    @Qualifier("app-com.energizeglobal.itpm.config.ApplicationConfig")
+    @Autowired
     private ApplicationConfig appProperties;
 
     public String createToken(Authentication authentication) {

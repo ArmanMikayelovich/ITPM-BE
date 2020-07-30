@@ -3,6 +3,7 @@ package com.energizeglobal.itpm.security;
 import com.energizeglobal.itpm.model.UserEntity;
 import com.energizeglobal.itpm.model.enums.AuthProvider;
 import com.energizeglobal.itpm.repository.UserRepository;
+import com.energizeglobal.itpm.util.exceptions.OAuth2AuthenticationProcessingException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -58,10 +59,25 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user = updateExistingUser(user, oAuth2UserInfo);
 
         } else {
-            user = registerNewUser(oAuth2UserRequest, oAuth2User.getAttributes());
+            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }
 
         return UserPrincipal.create(user, oAuth2User.getAttributes());
+    }
+
+    private UserEntity registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
+        UserEntity user = new UserEntity();
+
+        user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
+        user.setProviderId(oAuth2UserInfo.getId());
+        user.setFirstName(oAuth2UserInfo.getName());
+        user.setEmail(oAuth2UserInfo.getEmail());
+        return userRepository.save(user);
+    }
+
+    private UserEntity updateExistingUser(UserEntity existingUser, OAuth2UserInfo oAuth2UserInfo) {
+        existingUser.setFirstName(oAuth2UserInfo.getName());
+        return userRepository.save(existingUser);
     }
 
 

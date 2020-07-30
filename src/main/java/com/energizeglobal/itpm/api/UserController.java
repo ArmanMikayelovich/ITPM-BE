@@ -2,12 +2,15 @@ package com.energizeglobal.itpm.api;
 
 import com.energizeglobal.itpm.model.dto.UserDto;
 import com.energizeglobal.itpm.model.dto.UserProjectDto;
+import com.energizeglobal.itpm.security.CurrentUser;
+import com.energizeglobal.itpm.security.UserPrincipal;
 import com.energizeglobal.itpm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -52,5 +55,11 @@ public class UserController {
                                                    @RequestParam final Pageable pageable) {
         log.trace("searching users by project id: " + projectId + " || pagination: " + pageable);
         return userService.findAllUsersByProject(projectId, pageable);
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('USER')")
+    public UserDto getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
+        return userService.findById(userPrincipal.getId());
     }
 }

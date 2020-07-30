@@ -1,7 +1,7 @@
 package com.energizeglobal.itpm.security;
 
-import lombok.AllArgsConstructor;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,12 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@AllArgsConstructor
+
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger log = Logger.getLogger(TokenAuthenticationFilter.class);
+
+    @Autowired
     private TokenProvider tokenProvider;
 
+    @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
 

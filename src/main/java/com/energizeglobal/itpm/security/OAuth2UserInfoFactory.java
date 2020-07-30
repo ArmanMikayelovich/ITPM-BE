@@ -1,6 +1,7 @@
 package com.energizeglobal.itpm.security;
 
 import com.energizeglobal.itpm.model.enums.AuthProvider;
+import com.energizeglobal.itpm.util.exceptions.OAuth2AuthenticationProcessingException;
 
 import java.util.Map;
 

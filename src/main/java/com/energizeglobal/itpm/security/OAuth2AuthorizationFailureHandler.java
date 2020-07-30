@@ -1,5 +1,6 @@
 package com.energizeglobal.itpm.security;
 
+import com.energizeglobal.itpm.util.CookieUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import static com.energizeglobal.itpm.security.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Component
-public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+public class OAuth2AuthorizationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     @Override

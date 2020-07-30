@@ -1,6 +1,8 @@
 package com.energizeglobal.itpm.security;
 
 import com.energizeglobal.itpm.config.ApplicationConfig;
+import com.energizeglobal.itpm.util.CookieUtils;
+import com.energizeglobal.itpm.util.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.security.core.Authentication;
@@ -18,8 +20,8 @@ import java.util.Optional;
 
 @Component
 @AllArgsConstructor
-public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private static final Logger log = Logger.getLogger(OAuth2AuthenticationSuccessHandler.class);
+public class OAuth2AuthorizationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+    private static final Logger log = Logger.getLogger(OAuth2AuthorizationSuccessHandler.class);
     private TokenProvider tokenProvider;
 
     private ApplicationConfig applicationConfig;
