@@ -8,7 +8,13 @@ import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -18,6 +24,21 @@ public class UserController {
     private static final Logger log = Logger.getLogger(UserController.class);
 
     private final UserService userService;
+
+    //EXAMPLE
+// TODO DELETE AFTER INVESTIGATING
+    @GetMapping("/user")
+    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
+        return Collections.singletonMap("name", principal.getAttribute("name"));
+    }
+
+    @GetMapping("/error")
+    public String error(HttpServletRequest request) {
+        String message = (String) request.getSession().getAttribute("error.message");
+        request.getSession().removeAttribute("error.message");
+        return message;
+    }
+
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void createUser(@RequestBody UserDto userDto) {
