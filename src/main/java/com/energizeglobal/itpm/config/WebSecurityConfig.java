@@ -6,23 +6,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.List;
-import java.util.Map;
-
-import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient;
 
 @Configuration
 @EnableWebSecurity
@@ -43,11 +35,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
 
-                .oauth2Login(o -> o
-                        .failureHandler((request, response, exception) ->
-                                request.getSession().setAttribute("error.message", exception.getMessage())
-                        )
+                .oauth2Login(o -> {
+
+                            o
+                                    .failureHandler((request, response, exception) ->
+                                            request.getSession().setAttribute("error.message", exception.getMessage())
+                                    );
+                            o.successHandler((request, response, authentication) -> {
+                                response.sendRedirect("http://localhost:3000/");
+                            });
+                        }
+
                 );
+
     }
 
     @Bean
@@ -62,7 +62,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService(WebClient rest) {
         DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
         return request -> {
+
             OAuth2User user = delegate.loadUser(request);
+            return user;
+           /* OAuth2User user = delegate.loadUser(request);
             if (!"github".equals(request.getClientRegistration().getRegistrationId())) {
                 return user;
             }
@@ -81,7 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 return user;
             }
 
-            throw new OAuth2AuthenticationException(new OAuth2Error("invalid_token", "Not in Spring Team", ""));
+            throw new OAuth2AuthenticationException(new OAuth2Error("invalid_token", "Not in Spring Team", ""));*/
         };
     }
 
