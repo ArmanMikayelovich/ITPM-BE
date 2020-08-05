@@ -56,13 +56,13 @@ public class UserController {
     }
 
     @GetMapping(value = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public UserDto findById(@PathVariable("userId") Long userId) {
+    public UserDto findById(@PathVariable("userId") String userId) {
         log.trace("searching user by id: " + userId);
         return userService.findById(userId);
     }
 
     @PutMapping(value = "/activation")
-    public void changeActivation(@RequestParam("userId") Long userId,
+    public void changeActivation(@RequestParam("userId") String userId,
                                  @RequestParam("status") Boolean status) {
         log.trace("changing activation status of user:" + userId + " to: " + status);
         userService.changeActivationStatus(userId, status);

@@ -78,13 +78,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findById(Long userId) {
+    public UserDto findById(String userId) {
         log.trace("Searching user by id" + userId);
         return mapper.map(findEntityById(userId), new UserDto());
     }
 
     @Override
-    public UserEntity findEntityById(Long userId) {
+    public UserEntity findEntityById(String userId) {
         return userRepository.findById(userId)
                 .orElseGet(() -> {
                     log.warn("User with id:" + userId + " not found.");
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void changeActivationStatus(Long userId, Boolean status) {
+    public void changeActivationStatus(String userId, Boolean status) {
         log.trace("Changing activation status of user: " + userId + " to :" + status);
         final UserEntity userEntity = findEntityById(userId);
         userEntity.setIsActive(status);

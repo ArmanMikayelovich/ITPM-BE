@@ -29,6 +29,7 @@ public class SprintEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "fk_project_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private ProjectEntity projectEntity;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

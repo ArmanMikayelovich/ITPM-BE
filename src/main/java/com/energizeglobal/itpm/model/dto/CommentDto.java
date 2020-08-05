@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class CommentDto {
     private Long id;
 
-    private Long publisherId;
+    private String publisherId;
 
     private Long taskId;
 

@@ -12,7 +12,7 @@ public interface TaskService {
 
     void addTaskToSprint(TaskDto taskDto);
 
-    void attachTaskToUser(Long taskId, Long userId);
+    void attachTaskToUser(Long taskId, String userId);
 
     void changeTask(TaskDto taskDto);
 

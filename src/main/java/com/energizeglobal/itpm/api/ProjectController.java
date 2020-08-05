@@ -49,7 +49,7 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/by-users/{userId}")
-    public Page<ProjectDto> findAllByUser(@PathVariable("userId") Long userId, @RequestParam final Pageable pageable) {
+    public Page<ProjectDto> findAllByUser(@PathVariable("userId") String userId, @RequestParam final Pageable pageable) {
         log.trace("searching projects by userId: " + userId + " || pageable: " + pageable);
         return projectService.findAllByAssignedUserId(userId, pageable);
     }

@@ -13,11 +13,11 @@ public interface UserService {
 
     void updateUser(UserDto userDto);
 
-    UserDto findById(Long userId);
+    UserDto findById(String userId);
 
-    UserEntity findEntityById(Long userId);
+    UserEntity findEntityById(String userId);
 
-    void changeActivationStatus(Long userId, Boolean status);
+    void changeActivationStatus(String userId, Boolean status);
 
     Page<UserProjectDto> findAllUsersByProject(String projectId, Pageable pageable);
 

@@ -1,5 +1,8 @@
 package com.energizeglobal.itpm.config;
 
+import com.energizeglobal.itpm.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -18,13 +21,19 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private static final Logger log = Logger.getLogger(WebSecurityConfig.class);
+    private static final String GITHUB_REG_ID = "github";
+    private static final String GOOGLE_REG_ID = "z";
+    private final UserRepository userRepository;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(a -> a
-                        .antMatchers("/", "/error", "/webjars/**").permitAll()
-                        .anyRequest().authenticated()
+//                        .antMatchers("/", "/error", "/webjars/**").permitAll()
+                                .anyRequest().permitAll()
                 )
                 .logout(l -> l.logoutSuccessUrl("/").permitAll()
                 ).csrf().disable()
@@ -62,29 +71,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService(WebClient rest) {
         DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
         return request -> {
-
+            log.debug(request);
             OAuth2User user = delegate.loadUser(request);
             return user;
-           /* OAuth2User user = delegate.loadUser(request);
-            if (!"github".equals(request.getClientRegistration().getRegistrationId())) {
-                return user;
-            }
 
-            OAuth2AuthorizedClient client = new OAuth2AuthorizedClient
-                    (request.getClientRegistration(), user.getName(), request.getAccessToken());
-            String url = user.getAttribute("organizations_url");
-            List<Map<String, Object>> orgs = rest
-                    .get().uri(url)
-                    .attributes(oauth2AuthorizedClient(client))
-                    .retrieve()
-                    .bodyToMono(List.class)
-                    .block();
-
-            if (orgs.stream().anyMatch(org -> "spring-projects".equals(org.get("login")))) {
-                return user;
-            }
-
-            throw new OAuth2AuthenticationException(new OAuth2Error("invalid_token", "Not in Spring Team", ""));*/
         };
     }
 

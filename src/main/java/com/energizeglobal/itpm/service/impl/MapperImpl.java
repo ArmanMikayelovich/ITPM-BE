@@ -53,7 +53,7 @@ public class MapperImpl implements Mapper {
     @Override
     public CommentEntity map(CommentDto commentDto, CommentEntity commentEntity) {
         commentEntity.setId(commentDto.getId());
-        commentEntity.setPublisherUserEntity(userService.findEntityById(commentDto.getId()));
+        commentEntity.setPublisherUserEntity(userService.findEntityById(commentDto.getPublisherId()));
         commentEntity.setTaskEntity(taskService.findEntityById(commentDto.getTaskId()));
         commentEntity.setText(commentDto.getText());
         commentEntity.setCreatedAt(commentDto.getCreatedAt());

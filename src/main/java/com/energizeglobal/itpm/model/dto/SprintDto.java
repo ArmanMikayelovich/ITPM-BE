@@ -11,7 +11,7 @@ public class SprintDto {
 
     private String projectId;
 
-    private Long creatorId;
+    private String creatorId;
 
     private LocalDateTime creationTimestamp;
 

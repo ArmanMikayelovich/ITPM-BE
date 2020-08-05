@@ -15,6 +15,6 @@ public class ProjectDto {
 
     private LocalDateTime createdAt;
 
-    private Long publisherId;
+    private String publisherId;
 
 }

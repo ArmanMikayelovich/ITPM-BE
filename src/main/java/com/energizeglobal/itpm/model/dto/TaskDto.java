@@ -13,9 +13,9 @@ public class TaskDto {
 
     private Long springId;
 
-    private Long creatorId;
+    private String creatorId;
 
-    private Long assignedUserId;
+    private String assignedUserId;
 
     private TaskType taskType;
 }

@@ -54,7 +54,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void attachTaskToUser(Long taskId, Long userId) {
+    public void attachTaskToUser(Long taskId, String userId) {
         log.trace("attaching task: " + taskId + " to user: " + userId);
         final TaskEntity taskEntity = findEntityById(taskId);
         final UserEntity userEntity = userService.findEntityById(userId);

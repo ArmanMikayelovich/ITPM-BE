@@ -86,7 +86,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Page<ProjectDto> findAllByAssignedUserId(Long userId, Pageable pageable) {
+    public Page<ProjectDto> findAllByAssignedUserId(String userId, Pageable pageable) {
         log.trace("Searching projects by attached worker. userId : " + userId);
         final UserEntity userEntity = userService.findEntityById(userId);
         final Page<UserProjectEntity> userProjectEntities = userProjectRepository
