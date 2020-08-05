@@ -37,7 +37,7 @@ public class UserEntity {
 
     @CreationTimestamp
     @Column(name = "registration_time", updatable = false)
-    private LocalDate registrationDate;
+    private LocalDate registrationDate = LocalDate.now();
 
     @Column(name = "email", unique = true, updatable = false)
     private String email;
