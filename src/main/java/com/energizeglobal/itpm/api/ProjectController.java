@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/projects")
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public class ProjectController {
         log.trace("project updated : " + projectDto);
     }
 
-    @GetMapping(value = "/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/by-id/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ProjectDto findById(@PathVariable("projectId") String projectId) {
         log.trace("Searching project by id: " + projectId);
         final ProjectDto byId = projectService.findById(projectId);
@@ -48,8 +48,8 @@ public class ProjectController {
 
     }
 
-    @GetMapping(value = "/by-users/{userId}")
-    public Page<ProjectDto> findAllByUser(@PathVariable("userId") String userId, @RequestParam final Pageable pageable) {
+    @GetMapping(value = "/by-user/{userId}")
+    public Page<ProjectDto> findAllByUser(@PathVariable("userId") String userId, @RequestParam(required = false) final Pageable pageable) {
         log.trace("searching projects by userId: " + userId + " || pageable: " + pageable);
         return projectService.findAllByAssignedUserId(userId, pageable);
     }
