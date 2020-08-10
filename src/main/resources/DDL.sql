@@ -1,116 +1,113 @@
-create table users
+
+-- users: table
+CREATE TABLE `users`
 (
-    id                varchar(255)         not null,
-    first_name        varchar(255)         not null,
-    last_name         varchar(255)         not null,
-    registration_time date                 null,
-    email             varchar(255)         not null,
-    password          varchar(255)         not null,
-    is_active         tinyint(1) default 0 null,
-    constraint users_id_index
-        unique (id)
-);
+    `id`                varchar(255) NOT NULL,
+    `first_name`        varchar(255) NOT NULL,
+    `last_name`         varchar(255) NOT NULL,
+    `registration_time` date       DEFAULT NULL,
+    `email`             varchar(255) NOT NULL,
+    `password`          varchar(255) NOT NULL,
+    `is_active`         tinyint(1) DEFAULT '0',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `users_id_index` (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
 
-alter table users
-    add primary key (id);
-
-create table projects
+-- projects: table
+CREATE TABLE `projects`
 (
-    id           varchar(255)                       not null,
-    name         varchar(255)                       not null,
-    description  varchar(2500)                      null,
-    created_at   datetime default CURRENT_TIMESTAMP not null,
-    fk_publisher varchar(255)                       null,
-    constraint projects_id_uindex
-        unique (id),
-    constraint fk_publisher
-        foreign key (fk_publisher) references users (id)
-            on update cascade on delete cascade
-);
+    `id`           varchar(255) NOT NULL,
+    `name`         varchar(255) NOT NULL,
+    `description`  varchar(2500)         DEFAULT NULL,
+    `created_at`   datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `fk_publisher` varchar(255)          DEFAULT NULL,
+    UNIQUE KEY `projects_id_uindex` (`id`),
+    KEY `fk_publisher` (`fk_publisher`),
+    CONSTRAINT `fk_publisher` FOREIGN KEY (`fk_publisher`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
 
-create table sprints
+
+-- sprints: table
+CREATE TABLE `sprints`
 (
-    id            bigint auto_increment,
-    fk_project_id varchar(255)                       not null,
-    fk_user_id    varchar(255)                       not null,
-    created_at    datetime default CURRENT_TIMESTAMP not null,
-    dead_line     datetime                           not null,
-    constraint sprints_fk_project_id_uindex
-        unique (fk_project_id),
-    constraint sprints_fk_user_id_uindex
-        unique (fk_user_id),
-    constraint sprints_id_uindex
-        unique (id),
-    constraint fk_sprint_project_id
-        foreign key (fk_project_id) references projects (id)
-            on update cascade on delete cascade,
-    constraint fk_sprint_user_id
-        foreign key (fk_user_id) references users (id)
-            on update cascade on delete cascade
-);
+    `id`            bigint       NOT NULL AUTO_INCREMENT,
+    `fk_project_id` varchar(255) NOT NULL,
+    `fk_user_id`    varchar(255) NOT NULL,
+    `created_at`    datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `dead_line`     datetime     NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `sprints_id_uindex` (`id`),
+    KEY `sprint_user_id_FK` (`fk_user_id`),
+    KEY `sprints_projects_id_fk` (`fk_project_id`),
+    CONSTRAINT `sprint_user_id_FK` FOREIGN KEY (`fk_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `sprints_projects_id_fk` FOREIGN KEY (`fk_project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 12
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
 
-alter table sprints
-    add primary key (id);
 
-create table tasks
+-- tasks: table
+CREATE TABLE `tasks`
 (
-    id                  bigint auto_increment
-        primary key,
-    name                varchar(255)  not null,
-    description         varchar(2500) null,
-    fk_creator_user_id  varchar(255)  not null,
-    fk_assigned_user_id varchar(255)  not null,
-    fk_sprint_id        bigint        not null,
-    task_type           varchar(50)   not null,
-    constraint fk_asigned_user_id
-        foreign key (fk_assigned_user_id) references users (id)
-            on update cascade on delete cascade,
-    constraint fk_creator_user_id
-        foreign key (fk_creator_user_id) references users (id)
-            on update cascade on delete cascade,
-    constraint fk_sprint_id
-        foreign key (fk_sprint_id) references sprints (id)
-            on update cascade on delete cascade
-);
+    `id`                  bigint       NOT NULL AUTO_INCREMENT,
+    `name`                varchar(255) NOT NULL,
+    `description`         varchar(2500) DEFAULT NULL,
+    `fk_creator_user_id`  varchar(255) NOT NULL,
+    `fk_assigned_user_id` varchar(255) NOT NULL,
+    `fk_sprint_id`        bigint       NOT NULL,
+    `task_type`           varchar(50)  NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `fk_asigned_user_id` (`fk_assigned_user_id`),
+    KEY `fk_creator_user_id` (`fk_creator_user_id`),
+    KEY `fk_sprint_id` (`fk_sprint_id`),
+    CONSTRAINT `fk_asigned_user_id` FOREIGN KEY (`fk_assigned_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_creator_user_id` FOREIGN KEY (`fk_creator_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_sprint_id` FOREIGN KEY (`fk_sprint_id`) REFERENCES `sprints` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 40
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
 
-create table comments
+
+-- users_projects: table
+CREATE TABLE `users_projects`
 (
-    id                 bigint auto_increment,
-    fk_user_id         varchar(255)                       not null,
-    fk_task_id         bigint                             not null,
-    text               varchar(1000)                      not null,
-    creation_timestamp datetime default CURRENT_TIMESTAMP not null,
-    update_timestamp   datetime                           null on update CURRENT_TIMESTAMP,
-    constraint comments_id_uindex
-        unique (id),
-    constraint fk_task_id
-        foreign key (fk_task_id) references tasks (id)
-            on update cascade on delete cascade,
-    constraint fk_user_id
-        foreign key (fk_user_id) references users (id)
-            on update cascade on delete cascade
-);
+    `id`            bigint       NOT NULL AUTO_INCREMENT,
+    `fk_user_id`    varchar(255) NOT NULL,
+    `fk_project_id` varchar(255) NOT NULL,
+    `role`          varchar(50)  NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `users_projects_id_uindex` (`id`),
+    KEY `fk_project_id` (`fk_project_id`),
+    KEY `fl_user_id` (`fk_user_id`),
+    CONSTRAINT `fk_project_id` FOREIGN KEY (`fk_project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fl_user_id` FOREIGN KEY (`fk_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 19
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
 
-alter table comments
-    add primary key (id);
 
-create table users_projects
+-- comments: table
+CREATE TABLE `comments`
 (
-    id            bigint auto_increment,
-    fk_user_id    varchar(255) not null,
-    fk_project_id varchar(255) not null,
-    role          varchar(50)  not null,
-    constraint users_projects_id_uindex
-        unique (id),
-    constraint fk_project_id
-        foreign key (fk_project_id) references projects (id)
-            on update cascade on delete cascade,
-    constraint fl_user_id
-        foreign key (fk_user_id) references users (id)
-            on update cascade on delete cascade
-);
-
-alter table users_projects
-    add primary key (id);
-
-
+    `id`                 bigint        NOT NULL AUTO_INCREMENT,
+    `fk_user_id`         varchar(255)  NOT NULL,
+    `fk_task_id`         bigint        NOT NULL,
+    `text`               varchar(1000) NOT NULL,
+    `creation_timestamp` datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `update_timestamp`   datetime               DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `comments_id_uindex` (`id`),
+    KEY `fk_user_id` (`fk_user_id`),
+    KEY `fk_task_id` (`fk_task_id`),
+    CONSTRAINT `fk_task_id` FOREIGN KEY (`fk_task_id`) REFERENCES `tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_user_id` FOREIGN KEY (`fk_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
