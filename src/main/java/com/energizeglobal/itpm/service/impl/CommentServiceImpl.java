@@ -24,6 +24,7 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
+    @Transactional
     public void createComment(CommentDto commentDto) {
         log.trace("creating comment: " + commentDto);
         commentDto.setId(null);
@@ -33,6 +34,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public void updateComment(CommentDto commentDto) {
         log.trace("Updating comment: " + commentDto);
         CommentEntity commentEntity = findEntityById(commentDto.getId());
@@ -42,6 +44,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public void delete(Long commentId) {
         final CommentEntity commentEntity = findEntityById(commentId);
         commentRepository.delete(commentEntity);
