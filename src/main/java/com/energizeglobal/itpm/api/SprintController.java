@@ -34,7 +34,7 @@ public class SprintController {
 
     @GetMapping(value = "/by-project/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<SprintDto> findAllByProjectId(@PathVariable("projectId") String projectId,
-                                              @RequestParam Pageable pageable) {
+                                              @RequestParam(required = false) Pageable pageable) {
         log.trace("searching sprints by project id: " + projectId + " || pageable: " + pageable);
         return sprintService.findAllSprintsByProjectId(projectId, pageable);
     }

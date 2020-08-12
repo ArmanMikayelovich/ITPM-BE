@@ -26,6 +26,7 @@ public class SprintServiceImpl implements SprintService {
     private final ProjectService projectService;
 
     @Override
+    @Transactional
     public void addSprintToProject(SprintDto sprintDto) {
         sprintDto.setId(null);
         log.trace("adding sprint to Project: " + sprintDto);
@@ -36,6 +37,18 @@ public class SprintServiceImpl implements SprintService {
     }
 
     @Override
+    @Transactional
+    public void changeDeadLine(SprintDto sprintDto) {
+        final SprintEntity sprintEntity = findEntityById(sprintDto.getId());
+        log.trace("Deadline of sprint: " + sprintEntity + " changing to: " + sprintEntity.getDeadLine());
+        sprintEntity.setDeadLine(sprintDto.getDeadLine());
+
+        sprintRepository.save(sprintEntity);
+        log.trace("Deadline of sprint: " + sprintEntity + " changed to " + sprintDto.getDeadLine());
+        sprintRepository.flush();
+    }
+
+    @Override
     public Page<SprintDto> findAllSprintsByProjectId(String projectId, Pageable pageable) {
         log.trace("Searching all sprints by projectId: " + projectId);
         final Page<SprintEntity> allByProjectEntity = sprintRepository
@@ -43,16 +56,6 @@ public class SprintServiceImpl implements SprintService {
         log.trace("Sprints found: " + allByProjectEntity.getTotalElements());
         return allByProjectEntity
                 .map(sprintEntity -> mapper.map(sprintEntity, new SprintDto()));
-    }
-
-    @Override
-    public void changeDeadLine(SprintDto sprintDto) {
-        final SprintEntity sprintEntity = findEntityById(sprintDto.getId());
-        log.trace("Deadline of sprint: " + sprintEntity + " changing to: " + sprintEntity.getDeadLine());
-        sprintEntity.setDeadLine(sprintDto.getDeadLine());
-
-        sprintRepository.save(sprintEntity);
-        log.trace("Deadline of sprint: " + sprintEntity + " changed");
     }
 
 

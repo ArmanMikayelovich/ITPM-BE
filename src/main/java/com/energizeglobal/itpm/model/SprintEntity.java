@@ -40,7 +40,7 @@ public class SprintEntity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime creationTimestamp;
 
-    @Column(name = "dead_line", updatable = false)
+    @Column(name = "dead_line")
     private LocalDateTime deadLine;
 
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
