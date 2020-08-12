@@ -112,7 +112,7 @@ public class MapperImpl implements Mapper {
     public TaskEntity map(TaskDto taskDto, TaskEntity taskEntity) {
         taskEntity.setId(taskDto.getId());
         taskEntity.setCreatorUserEntity(userService.findEntityById(taskDto.getCreatorId()));
-        if (taskDto.getAssignedUserId() != null) {
+        if (taskDto.getAssignedUserId() != null && !taskDto.getAssignedUserId().isEmpty()) {
             taskEntity.setAssignedUserEntity(userService.findEntityById(taskDto.getAssignedUserId()));
         }
         taskEntity.setDescription(taskDto.getDescription());

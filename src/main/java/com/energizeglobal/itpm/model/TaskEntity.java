@@ -31,16 +31,16 @@ public class TaskEntity {
     @Column(name = "description", length = 1500)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_creator_user_id")
     private UserEntity creatorUserEntity;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_assigned_user_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private UserEntity assignedUserEntity;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_sprint_id")
     private SprintEntity sprintEntity;
 

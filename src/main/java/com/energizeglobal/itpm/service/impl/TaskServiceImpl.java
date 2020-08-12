@@ -44,6 +44,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void addTaskToSprint(TaskDto taskDto) {
         taskDto.setId(null);
         log.trace("Adding task to Sprint: " + taskDto);
@@ -64,6 +65,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void changeTask(TaskDto taskDto) {
         log.trace("Changing task: " + taskDto.getId());
         final TaskEntity taskEntity = findEntityById(taskDto.getId());
@@ -73,10 +75,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void remove(Long taskId) {
-        log.trace("removing task: " + taskId);
-        final TaskEntity taskEntity = findEntityById(taskId);
-        taskRepository.delete(taskEntity);
+
+        taskRepository.deleteById(taskId);
         log.trace("task: " + taskId + " deleted.");
     }
 }
