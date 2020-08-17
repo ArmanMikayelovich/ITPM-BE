@@ -16,78 +16,78 @@ VALUES ('PR_3', 'project 3', 'description for project 3', '2020-08-08 11:36:37',
 INSERT INTO itpm.projects (id, name, description, created_at, fk_publisher)
 VALUES ('PR_4', 'project 4', 'description for project 4', '2020-08-08 11:36:37', '4');
 
-INSERT INTO itpm.sprints (fk_project_id, fk_user_id, created_at, dead_line)
-VALUES ('PR_1', '1', '2020-08-08 11:36:37', '2020-08-15 11:36:37');
-INSERT INTO itpm.sprints (fk_project_id, fk_user_id, created_at, dead_line)
-VALUES ('PR_2', '2', '2020-08-08 11:36:37', '2020-08-15 11:36:37');
-INSERT INTO itpm.sprints (fk_project_id, fk_user_id, created_at, dead_line)
-VALUES ('PR_3', '3', '2020-08-08 11:36:38', '2020-08-15 11:36:38');
-INSERT INTO itpm.sprints (fk_project_id, fk_user_id, created_at, dead_line)
-VALUES ('PR_4', '4', '2020-08-08 11:36:38', '2020-08-15 11:36:38');
+INSERT INTO itpm.sprints (id, fk_project_id, fk_user_id, created_at, dead_line)
+VALUES (1, 'PR_1', '1', '2020-08-08 11:36:37', '2020-08-15 11:36:37');
+INSERT INTO itpm.sprints (id, fk_project_id, fk_user_id, created_at, dead_line)
+VALUES (2, 'PR_2', '2', '2020-08-08 11:36:37', '2020-08-15 11:36:37');
+INSERT INTO itpm.sprints (id, fk_project_id, fk_user_id, created_at, dead_line)
+VALUES (3, 'PR_3', '3', '2020-08-08 11:36:38', '2020-08-15 11:36:38');
+INSERT INTO itpm.sprints (id, fk_project_id, fk_user_id, created_at, dead_line)
+VALUES (4, 'PR_4', '4', '2020-08-08 11:36:38', '2020-08-15 11:36:38');
 
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 1', 'Description or task: 1', '4', '2', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 2', 'Description or task: 2', '4', '3', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 3', 'Description or task: 3', '4', '4', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 4', 'Description or task: 4', '4', '1', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 5', 'Description or task: 5', '4', '2', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 6', 'Description or task: 6', '4', '3', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 7', 'Description or task: 7', '4', '4', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 8', 'Description or task: 8', '4', '1', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 9', 'Description or task: 9', '4', '2', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 10', 'Description or task: 10', '4', '3', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 11', 'Description or task: 11', '4', '4', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 12', 'Description or task: 12', '4', '1', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 13', 'Description or task: 13', '4', '2', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 14', 'Description or task: 14', '4', '3', 4, 'TASK');
-INSERT INTO itpm.tasks (name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES ('Task: 15', 'Description or task: 15', '4', '4', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (1, 'Task: 1', 'Description or task: 1', '4', '2', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (2, 'Task: 2', 'Description or task: 2', '4', '3', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (3, 'Task: 3', 'Description or task: 3', '4', '4', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (4, 'Task: 4', 'Description or task: 4', '4', '1', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (5, 'Task: 5', 'Description or task: 5', '4', '2', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (6, 'Task: 6', 'Description or task: 6', '4', '3', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (7, 'Task: 7', 'Description or task: 7', '4', '4', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (8, 'Task: 8', 'Description or task: 8', '4', '1', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (9, 'Task: 9', 'Description or task: 9', '4', '2', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (10, 'Task: 10', 'Description or task: 10', '4', '3', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (11, 'Task: 11', 'Description or task: 11', '4', '4', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (12, 'Task: 12', 'Description or task: 12', '4', '1', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (13, 'Task: 13', 'Description or task: 13', '4', '2', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (14, 'Task: 14', 'Description or task: 14', '4', '3', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
+VALUES (15, 'Task: 15', 'Description or task: 15', '4', '4', 4, 'TASK');
 
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('1', 'PR_1', 'ADMINISTRATORS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('2', 'PR_1', 'DEVELOPERS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('3', 'PR_1', 'DEVELOPERS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('4', 'PR_1', 'DEVELOPERS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('1', 'PR_2', 'DEVELOPERS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('2', 'PR_2', 'ADMINISTRATORS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('3', 'PR_2', 'DEVELOPERS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('4', 'PR_2', 'DEVELOPERS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('1', 'PR_3', 'DEVELOPERS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('2', 'PR_3', 'DEVELOPERS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('3', 'PR_3', 'ADMINISTRATORS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('4', 'PR_3', 'DEVELOPERS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('1', 'PR_4', 'DEVELOPERS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('2', 'PR_4', 'DEVELOPERS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('3', 'PR_4', 'DEVELOPERS');
-INSERT INTO itpm.users_projects (fk_user_id, fk_project_id, role)
-VALUES ('4', 'PR_4', 'ADMINISTRATORS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (1, '1', 'PR_1', 'ADMINISTRATORS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (2, '2', 'PR_1', 'DEVELOPERS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (3, '3', 'PR_1', 'DEVELOPERS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (4, '4', 'PR_1', 'DEVELOPERS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (5, '1', 'PR_2', 'DEVELOPERS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (6, '2', 'PR_2', 'ADMINISTRATORS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (7, '3', 'PR_2', 'DEVELOPERS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (8, '4', 'PR_2', 'DEVELOPERS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (9, '1', 'PR_3', 'DEVELOPERS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (10, '2', 'PR_3', 'DEVELOPERS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (11, '3', 'PR_3', 'ADMINISTRATORS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (12, '4', 'PR_3', 'DEVELOPERS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (13, '1', 'PR_4', 'DEVELOPERS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (14, '2', 'PR_4', 'DEVELOPERS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (15, '3', 'PR_4', 'DEVELOPERS');
+INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
+VALUES (16, '4', 'PR_4', 'ADMINISTRATORS');
 
 
 INSERT INTO itpm.comments (fk_user_id, fk_task_id, text, creation_timestamp, update_timestamp)

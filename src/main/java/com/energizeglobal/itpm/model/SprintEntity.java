@@ -27,12 +27,12 @@ public class SprintEntity {
     @Column(updatable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_project_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private ProjectEntity projectEntity;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_user_id")
     private UserEntity creatorUserEntity;
 

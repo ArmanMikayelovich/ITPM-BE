@@ -25,7 +25,8 @@ public class CommentController {
     }
 
     @GetMapping(value = "{tasksId}/comments", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Page<CommentDto> findAllByTaskId(@PathVariable("tasksId") Long tasksId, @RequestParam Pageable pageable) {
+    public Page<CommentDto> findAllByTaskId(@PathVariable("tasksId") Long tasksId,
+                                            @RequestParam(required = false) Pageable pageable) {
         log.trace("Searching comments  by taskId: " + tasksId);
         return commentService.findAllByTaskId(tasksId, pageable);
     }

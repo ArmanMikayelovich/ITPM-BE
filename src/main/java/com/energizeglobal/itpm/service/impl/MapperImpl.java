@@ -56,7 +56,7 @@ public class MapperImpl implements Mapper {
         commentEntity.setPublisherUserEntity(userService.findEntityById(commentDto.getPublisherId()));
         commentEntity.setTaskEntity(taskService.findEntityById(commentDto.getTaskId()));
         commentEntity.setText(commentDto.getText());
-        commentEntity.setCreatedAt(commentDto.getCreatedAt());
+
         return commentEntity;
     }
 

@@ -21,12 +21,12 @@ public class CommentEntity {
     @Column(updatable = false)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_user_id")
     private UserEntity publisherUserEntity;
 
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_task_id")
     private TaskEntity taskEntity;
 

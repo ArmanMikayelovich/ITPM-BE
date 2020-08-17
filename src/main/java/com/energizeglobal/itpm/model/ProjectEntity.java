@@ -33,7 +33,7 @@ public class ProjectEntity {
     @Column(name = "description", length = 1000)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_publisher")
     private UserEntity publisher;
 
