@@ -119,6 +119,7 @@ public class MapperImpl implements Mapper {
         taskEntity.setName(taskDto.getName());
         taskEntity.setSprintEntity(sprintService.findEntityById(taskDto.getSpringId()));
         taskEntity.setTaskType(taskDto.getTaskType());
+        taskEntity.setTaskState(taskDto.getTaskState());
         return taskEntity;
     }
 
@@ -132,6 +133,7 @@ public class MapperImpl implements Mapper {
         if (taskEntity.getAssignedUserEntity() != null) {
             taskDto.setAssignedUserId(taskEntity.getAssignedUserEntity().getId());
         }
+        taskDto.setTaskType(taskEntity.getTaskType());
         taskDto.setTaskType(taskEntity.getTaskType());
         return taskDto;
     }

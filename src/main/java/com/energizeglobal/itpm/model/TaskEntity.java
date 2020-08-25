@@ -1,5 +1,6 @@
 package com.energizeglobal.itpm.model;
 
+import com.energizeglobal.itpm.model.enums.TaskState;
 import com.energizeglobal.itpm.model.enums.TaskType;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,9 @@ public class TaskEntity {
 
     @Enumerated(EnumType.STRING)
     private TaskType taskType;
+
+    @Enumerated(EnumType.STRING)
+    private TaskState taskState = TaskState.TODO;
 
     @Column(name = "description", length = 1500)
     private String description;

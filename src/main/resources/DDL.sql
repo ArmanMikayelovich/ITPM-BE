@@ -61,6 +61,7 @@ CREATE TABLE `tasks`
     `fk_assigned_user_id` varchar(255) NOT NULL,
     `fk_sprint_id`        bigint       NOT NULL,
     `task_type`           varchar(50)  NOT NULL,
+    `task_state`          varchar(50)  NOT NULL,
     PRIMARY KEY (`id`),
     KEY `fk_asigned_user_id` (`fk_assigned_user_id`),
     KEY `fk_creator_user_id` (`fk_creator_user_id`),

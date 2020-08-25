@@ -1,10 +1,13 @@
 package com.energizeglobal.itpm.service.impl;
 
+import com.energizeglobal.itpm.model.SprintEntity;
 import com.energizeglobal.itpm.model.TaskEntity;
 import com.energizeglobal.itpm.model.UserEntity;
 import com.energizeglobal.itpm.model.dto.TaskDto;
+import com.energizeglobal.itpm.model.enums.TaskState;
 import com.energizeglobal.itpm.repository.TaskRepository;
 import com.energizeglobal.itpm.service.Mapper;
+import com.energizeglobal.itpm.service.SprintService;
 import com.energizeglobal.itpm.service.TaskService;
 import com.energizeglobal.itpm.service.UserService;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
@@ -13,7 +16,9 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,6 +29,7 @@ public class TaskServiceImpl implements TaskService {
     private final Mapper mapper;
     private final TaskRepository taskRepository;
     private final UserService userService;
+    private final SprintService sprintService;
 
     @Override
     public TaskDto findById(Long taskId) {
@@ -41,6 +47,19 @@ public class TaskServiceImpl implements TaskService {
         log.trace(resultLog);
         return byId
                 .orElseThrow(() -> new NotFoundException("Task with id: " + taskId + " not found."));
+    }
+
+    @Override
+    public List<TaskDto> findAllBySprintAndState(Long sprintId, TaskState taskState) {
+        final SprintEntity sprintEntity = sprintService.findEntityById(sprintId);
+
+        return taskRepository.findAllBySprintEntityAndTaskState(sprintEntity, taskState)
+                .stream()
+                .map(taskEntity -> {
+                    final TaskDto taskDto = new TaskDto();
+                    mapper.map(taskEntity, taskDto);
+                    return taskDto;
+                }).collect(Collectors.toList());
     }
 
     @Override

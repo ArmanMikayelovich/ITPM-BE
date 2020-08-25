@@ -1,11 +1,14 @@
 package com.energizeglobal.itpm.api;
 
 import com.energizeglobal.itpm.model.dto.TaskDto;
+import com.energizeglobal.itpm.model.enums.TaskState;
 import com.energizeglobal.itpm.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tasks")
@@ -20,6 +23,13 @@ public class TaskController {
     public TaskDto findById(@PathVariable("taskId") Long taskId) {
         log.trace("searching task by id: " + taskId);
         return taskService.findById(taskId);
+    }
+
+    @GetMapping(value = "/by-sprint/{sprintId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<TaskDto> findBySprintIdAndState(@PathVariable("sprintId") Long sprintId,
+                                                @RequestParam(required = false) TaskState taskState) {
+        log.trace("searching all tasks by Sprint: " + sprintId + " and state: " + taskState.toString());
+        return taskService.findAllBySprintAndState(sprintId, taskState);
     }
 
 

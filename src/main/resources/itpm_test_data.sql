@@ -25,36 +25,51 @@ VALUES (3, 'PR_3', '3', '2020-08-08 11:36:38', '2020-08-15 11:36:38');
 INSERT INTO itpm.sprints (id, fk_project_id, fk_user_id, created_at, dead_line)
 VALUES (4, 'PR_4', '4', '2020-08-08 11:36:38', '2020-08-15 11:36:38');
 
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (1, 'Task: 1', 'Description or task: 1', '4', '2', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (2, 'Task: 2', 'Description or task: 2', '4', '3', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (3, 'Task: 3', 'Description or task: 3', '4', '4', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (4, 'Task: 4', 'Description or task: 4', '4', '1', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (5, 'Task: 5', 'Description or task: 5', '4', '2', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (6, 'Task: 6', 'Description or task: 6', '4', '3', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (7, 'Task: 7', 'Description or task: 7', '4', '4', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (8, 'Task: 8', 'Description or task: 8', '4', '1', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (9, 'Task: 9', 'Description or task: 9', '4', '2', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (10, 'Task: 10', 'Description or task: 10', '4', '3', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (11, 'Task: 11', 'Description or task: 11', '4', '4', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (12, 'Task: 12', 'Description or task: 12', '4', '1', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (13, 'Task: 13', 'Description or task: 13', '4', '2', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (14, 'Task: 14', 'Description or task: 14', '4', '3', 4, 'TASK');
-INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type)
-VALUES (15, 'Task: 15', 'Description or task: 15', '4', '4', 4, 'TASK');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (1, 'Task: 1', 'Description or task: 1', '1', '2', 1, 'TASK', 'TODO');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (2, 'Task: 2', 'Description or task: 2', '1', '3', 1, 'TASK', 'IN_PROGRESS');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (3, 'Task: 3', 'Description or task: 3', '1', '4', 1, 'TASK', 'DONE');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (4, 'Task: 4', 'Description or task: 4', '1', '1', 1, 'TASK', 'TODO');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (5, 'Task: 5', 'Description or task: 5', '2', '2', 2, 'TASK', 'IN_PROGRESS');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (6, 'Task: 6', 'Description or task: 6', '2', '3', 2, 'TASK', 'TODO');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (7, 'Task: 7', 'Description or task: 7', '2', '4', 2, 'TASK', 'TODO');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (8, 'Task: 8', 'Description or task: 8', '2', '1', 2, 'TASK', 'IN_PROGRESS');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (9, 'Task: 9', 'Description or task: 9', '3', '2', 3, 'TASK', 'TODO');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (10, 'Task: 10', 'Description or task: 10', '3', '3', 3, 'TASK', 'TODO');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (11, 'Task: 11', 'Description or task: 11', '3', '4', 3, 'TASK', 'IN_PROGRESS');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (12, 'Task: 12', 'Description or task: 12', '3', '1', 3, 'TASK', 'TODO');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (13, 'Task: 13', 'Description or task: 13', '4', '2', 4, 'TASK', 'TODO');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (14, 'Task: 14', 'Description or task: 14', '4', '3', 4, 'TASK', 'IN_PROGRESS');
+INSERT INTO itpm.tasks (id, name, description, fk_creator_user_id, fk_assigned_user_id, fk_sprint_id, task_type,
+                        task_state)
+VALUES (15, 'Task: 15', 'Description or task: 15', '4', '4', 4, 'TASK', 'TODO');
 
 INSERT INTO itpm.users_projects (id, fk_user_id, fk_project_id, role)
 VALUES (1, '1', 'PR_1', 'ADMINISTRATORS');
