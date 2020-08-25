@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/tasks")
 @RequiredArgsConstructor

@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.Map;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -70,7 +69,7 @@ public class UserController {
 
     @GetMapping(value = "/by-project/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<UserProjectDto> findAllByProjectId(@PathVariable("projectId") String projectId,
-                                                   @RequestParam final Pageable pageable) {
+                                                   @RequestParam(required = false) final Pageable pageable) {
         log.trace("searching users by project id: " + projectId + " || pagination: " + pageable);
         return userService.findAllUsersByProject(projectId, pageable);
     }
