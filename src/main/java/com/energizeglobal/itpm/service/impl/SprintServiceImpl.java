@@ -73,4 +73,9 @@ public class SprintServiceImpl implements SprintService {
         return byId
                 .orElseThrow(() -> new NotFoundException("Sprint with id: " + sprintId + " not found."));
     }
+
+    @Override
+    public SprintDto findActiveSprintByProjectId(String projectId) {
+        sprintRepository.
+    }
 }

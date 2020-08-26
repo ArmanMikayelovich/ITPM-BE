@@ -134,7 +134,7 @@ public class MapperImpl implements Mapper {
             taskDto.setAssignedUserId(taskEntity.getAssignedUserEntity().getId());
         }
         taskDto.setTaskType(taskEntity.getTaskType());
-        taskDto.setTaskType(taskEntity.getTaskType());
+        taskDto.setTaskState(taskEntity.getTaskState());
         return taskDto;
     }
 

@@ -53,7 +53,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDto> findAllBySprintAndState(Long sprintId, TaskState taskState) {
         final SprintEntity sprintEntity = sprintService.findEntityById(sprintId);
 
-        return taskRepository.findAllBySprintEntityAndTaskState(sprintEntity, taskState)
+        return taskRepository.findAllBySprintAndState(sprintEntity, taskState)
                 .stream()
                 .map(taskEntity -> {
                     final TaskDto taskDto = new TaskDto();

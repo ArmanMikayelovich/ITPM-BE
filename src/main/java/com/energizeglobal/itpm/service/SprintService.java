@@ -16,4 +16,6 @@ public interface SprintService {
 
     SprintEntity findEntityById(Long sprintId);
 
+    SprintDto findActiveSprintByProjectId(String projectId);
+
 }

@@ -38,4 +38,10 @@ public class SprintController {
         log.trace("searching sprints by project id: " + projectId + " || pageable: " + pageable);
         return sprintService.findAllSprintsByProjectId(projectId, pageable);
     }
+
+    @GetMapping(value = "/by-project/{projectId}/active", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public SprintDto findActiveSprintOfProject(@PathVariable("projectId") String projectId) {
+        log.trace("Searching active sprint of project: " + projectId);
+        return sprintService.findActiveSprintByProjectId(projectId);
+    }
 }
