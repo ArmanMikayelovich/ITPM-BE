@@ -7,7 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface SprintRepository extends JpaRepository<SprintEntity, Long> {
     Page<SprintEntity> findAllByProjectEntity(ProjectEntity projectEntity, Pageable pageable);
+
+    Optional<SprintEntity> findByProjectEntityAndIsRunningTrue(ProjectEntity projectEntity);
 }

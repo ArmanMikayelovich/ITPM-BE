@@ -1,5 +1,6 @@
 package com.energizeglobal.itpm.service.impl;
 
+import com.energizeglobal.itpm.model.ProjectEntity;
 import com.energizeglobal.itpm.model.SprintEntity;
 import com.energizeglobal.itpm.model.dto.SprintDto;
 import com.energizeglobal.itpm.repository.SprintRepository;
@@ -76,6 +77,9 @@ public class SprintServiceImpl implements SprintService {
 
     @Override
     public SprintDto findActiveSprintByProjectId(String projectId) {
-        sprintRepository.
+        final ProjectEntity projectEntity = projectService.findEntityById(projectId);
+        final Optional<SprintEntity> sprintEntityOptional = sprintRepository.findByProjectEntityAndIsRunningTrue(projectEntity);
+        final SprintEntity sprintEntity = sprintEntityOptional.orElseThrow(() -> new NotFoundException("Sprint not found"));
+        return mapper.map(sprintEntity, new SprintDto());
     }
 }

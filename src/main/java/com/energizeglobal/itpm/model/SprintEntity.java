@@ -48,6 +48,10 @@ public class SprintEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<TaskEntity> taskEntityList = new ArrayList<>();
 
+    @Column(name = "is_running")
+    private Boolean isRunning = Boolean.FALSE;
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
