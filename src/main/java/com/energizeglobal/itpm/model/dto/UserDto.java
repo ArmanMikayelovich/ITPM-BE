@@ -2,6 +2,8 @@ package com.energizeglobal.itpm.model.dto;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class UserDto {
     private String userId;
@@ -16,4 +18,5 @@ public class UserDto {
 
     private Boolean isActive;
 
+    private LocalDate registrationDate;
 }

@@ -47,6 +47,7 @@ public class MapperImpl implements Mapper {
         userDto.setFirstName(userEntity.getFirstName());
         userDto.setLastName(userEntity.getLastName());
         userDto.setIsActive(userEntity.getIsActive());
+        userDto.setRegistrationDate(userEntity.getRegistrationDate());
         return userDto;
     }
 

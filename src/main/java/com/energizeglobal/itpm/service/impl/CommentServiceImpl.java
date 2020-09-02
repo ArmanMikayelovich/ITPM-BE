@@ -1,10 +1,12 @@
 package com.energizeglobal.itpm.service.impl;
 
 import com.energizeglobal.itpm.model.CommentEntity;
+import com.energizeglobal.itpm.model.TaskEntity;
 import com.energizeglobal.itpm.model.dto.CommentDto;
 import com.energizeglobal.itpm.repository.CommentRepository;
 import com.energizeglobal.itpm.service.CommentService;
 import com.energizeglobal.itpm.service.Mapper;
+import com.energizeglobal.itpm.service.TaskService;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
@@ -21,7 +23,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final Mapper mapper;
     private final CommentRepository commentRepository;
-
+    private final TaskService taskService;
 
     @Override
     @Transactional
@@ -74,10 +76,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Page<CommentDto> findAllByTaskId(Long taskId, Pageable pageable) {
-        final CommentEntity commentEntity = findEntityById(taskId);
+        final TaskEntity taskEntity = taskService.findEntityById(taskId);
         log.trace("Searching comments by task id: " + taskId);
         final Page<CommentEntity> commentEntityPage = commentRepository
-                .findAllByTaskEntity(commentEntity.getTaskEntity(), pageable);
+                .findAllByTaskEntity(taskEntity, pageable);
         log.trace("Found comments by task id: " + taskId + "|| count " + commentEntityPage.getTotalElements());
         return commentEntityPage
                 .map(c -> mapper.map(c, new CommentDto()));
