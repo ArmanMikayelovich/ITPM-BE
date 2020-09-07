@@ -1,5 +1,6 @@
 package com.energizeglobal.itpm.service.impl;
 
+import com.energizeglobal.itpm.model.ProjectEntity;
 import com.energizeglobal.itpm.model.SprintEntity;
 import com.energizeglobal.itpm.model.TaskEntity;
 import com.energizeglobal.itpm.model.UserEntity;
@@ -11,8 +12,8 @@ import com.energizeglobal.itpm.service.SprintService;
 import com.energizeglobal.itpm.service.TaskService;
 import com.energizeglobal.itpm.service.UserService;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,6 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private static final Logger log = Logger.getLogger(TaskServiceImpl.class);
 
@@ -30,6 +30,14 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final UserService userService;
     private final SprintService sprintService;
+
+    public TaskServiceImpl(Mapper mapper, TaskRepository taskRepository,
+                           @Lazy UserService userService, @Lazy SprintService sprintService) {
+        this.mapper = mapper;
+        this.taskRepository = taskRepository;
+        this.userService = userService;
+        this.sprintService = sprintService;
+    }
 
     @Override
     public TaskDto findById(Long taskId) {
@@ -85,6 +93,15 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
+    public void changeTaskState(Long taskId, TaskState taskState) {
+        final TaskEntity taskEntity = findEntityById(taskId);
+        //TODO if (logged in user) != taskEntity.getAssignedUser throw Exception
+        taskEntity.setTaskState(taskState);
+        taskRepository.save(taskEntity);
+    }
+
+    @Override
+    @Transactional
     public void changeTask(TaskDto taskDto) {
         log.trace("Changing task: " + taskDto.getId());
         final TaskEntity taskEntity = findEntityById(taskDto.getId());
@@ -100,4 +117,13 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.deleteById(taskId);
         log.trace("task: " + taskId + " deleted.");
     }
+
+    @Override
+    public List<TaskDto> findAllByUserAndProject(UserEntity userEntity, ProjectEntity projectEntity) {
+        return taskRepository.findAllByUserAndProject(userEntity, projectEntity)
+                .stream()
+                .map(entity -> mapper.map(entity, new TaskDto()))
+                .collect(Collectors.toList());
+    }
+
 }

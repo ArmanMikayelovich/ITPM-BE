@@ -1,5 +1,6 @@
 package com.energizeglobal.itpm.api;
 
+import com.energizeglobal.itpm.model.dto.TaskDto;
 import com.energizeglobal.itpm.model.dto.UserDto;
 import com.energizeglobal.itpm.model.dto.UserProjectDto;
 import com.energizeglobal.itpm.service.UserService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -72,5 +74,16 @@ public class UserController {
                                                    @RequestParam(required = false) final Pageable pageable) {
         log.trace("searching users by project id: " + projectId + " || pagination: " + pageable);
         return userService.findAllUsersByProject(projectId, pageable);
+    }
+
+    @GetMapping(value = "/{userId}/projects", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<UserProjectDto> findAllProjectsOfUser(@PathVariable("userId") String userId) {
+        return userService.findAllProjectsOfUser(userId);
+    }
+
+    @GetMapping(value = "/{userId}/projects/{projectId}/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, List<TaskDto>> getUserTasksInProject(@PathVariable("userId") String userId,
+                                                            @PathVariable("projectId") String projectId) {
+        return userService.getUsersTasksInProject(userId, projectId);
     }
 }

@@ -3,12 +3,15 @@ package com.energizeglobal.itpm.service.impl;
 import com.energizeglobal.itpm.model.ProjectEntity;
 import com.energizeglobal.itpm.model.UserEntity;
 import com.energizeglobal.itpm.model.UserProjectEntity;
+import com.energizeglobal.itpm.model.dto.TaskDto;
 import com.energizeglobal.itpm.model.dto.UserDto;
 import com.energizeglobal.itpm.model.dto.UserProjectDto;
+import com.energizeglobal.itpm.model.enums.TaskState;
 import com.energizeglobal.itpm.repository.UserProjectRepository;
 import com.energizeglobal.itpm.repository.UserRepository;
 import com.energizeglobal.itpm.service.Mapper;
 import com.energizeglobal.itpm.service.ProjectService;
+import com.energizeglobal.itpm.service.TaskService;
 import com.energizeglobal.itpm.service.UserService;
 import com.energizeglobal.itpm.util.exceptions.AlreadyExistsException;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
@@ -20,23 +23,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private static final Logger log = Logger.getLogger(UserServiceImpl.class);
-
+    private static final String CREATED = "created";
     private final Mapper mapper;
     private final UserRepository userRepository;
     private final ProjectService projectService;
     private final UserProjectRepository userProjectRepository;
+    private final TaskService taskService;
 
-    public UserServiceImpl(Mapper mapper, UserRepository userRepository, @Lazy ProjectService projectService, UserProjectRepository userProjectRepository) {
+    public UserServiceImpl(Mapper mapper, UserRepository userRepository, @Lazy ProjectService projectService,
+                           UserProjectRepository userProjectRepository, TaskService taskService) {
         this.mapper = mapper;
         this.userRepository = userRepository;
         this.projectService = projectService;
         this.userProjectRepository = userProjectRepository;
+        this.taskService = taskService;
     }
 
     @Override
@@ -114,6 +120,58 @@ public class UserServiceImpl implements UserService {
         log.trace("Found " + userProjectEntities.getTotalElements() + " users by project Id: " + projectId);
         return userProjectEntities
                 .map(entity -> mapper.map(entity, new UserProjectDto()));
+    }
+
+    @Override
+    public List<UserProjectDto> findAllProjectsOfUser(String userId) {
+        final UserEntity userEntity = findEntityById(userId);
+        return userProjectRepository.findAllByUserEntity(userEntity, Pageable.unpaged())
+                .map(entity -> mapper.map(entity, new UserProjectDto())).toList();
+    }
+
+    @Override
+    public Map<String, List<TaskDto>> getUsersTasksInProject(String userId, String projectId) {
+        final ProjectEntity projectEntity = projectService.findEntityById(projectId);
+        final UserEntity userEntity = findEntityById(userId);
+        final List<TaskDto> tasksByUserAndProject = taskService.findAllByUserAndProject(userEntity, projectEntity);
+        final HashMap<String, List<TaskDto>> taskMap = new HashMap<>();
+
+        taskMap.put(CREATED, new ArrayList<>());
+        taskMap.put(TaskState.TODO.toString(), new ArrayList<>());
+        taskMap.put(TaskState.IN_PROGRESS.toString(), new ArrayList<>());
+        taskMap.put(TaskState.DONE.toString(), new ArrayList<>());
+
+        sortTasksInMapByStateOrCreator(userId, tasksByUserAndProject, taskMap);
+
+        return taskMap;
+    }
+
+    private void sortTasksInMapByStateOrCreator(String userId, List<TaskDto> tasksByUserAndProject,
+                                                Map<String, List<TaskDto>> taskMap) {
+        tasksByUserAndProject.forEach(taskDto -> {
+            if (taskDto.getCreatorId().equals(userId)) {
+                taskMap.get(CREATED).add(taskDto);
+            }
+
+            switch (taskDto.getTaskState()) {
+                case TODO: {
+                    taskMap.get(TaskState.TODO.toString()).add(taskDto);
+                    break;
+                }
+                case IN_PROGRESS: {
+                    taskMap.get(TaskState.IN_PROGRESS.toString()).add(taskDto);
+                    break;
+                }
+                case DONE: {
+                    taskMap.get(TaskState.DONE.toString()).add(taskDto);
+                    break;
+                }
+                default:
+                    throw new IllegalArgumentException(
+                            "unexpected value in enum: TaskState. value is " + taskDto.getTaskState());
+            }
+
+        });
     }
 
 

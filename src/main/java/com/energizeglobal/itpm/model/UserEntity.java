@@ -46,7 +46,7 @@ public class UserEntity {
     private String password;
 
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @OneToMany(mappedBy = "publisher")
+    @OneToMany(mappedBy = "creator")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ProjectEntity> ownProjects = new ArrayList<>();
 

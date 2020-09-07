@@ -1,6 +1,8 @@
 package com.energizeglobal.itpm.service;
 
+import com.energizeglobal.itpm.model.ProjectEntity;
 import com.energizeglobal.itpm.model.TaskEntity;
+import com.energizeglobal.itpm.model.UserEntity;
 import com.energizeglobal.itpm.model.dto.TaskDto;
 import com.energizeglobal.itpm.model.enums.TaskState;
 import org.springframework.stereotype.Service;
@@ -19,8 +21,11 @@ public interface TaskService {
 
     void attachTaskToUser(Long taskId, String userId);
 
+    void changeTaskState(Long taskId, TaskState taskState);
+
     void changeTask(TaskDto taskDto);
 
     void remove(Long taskId);
 
+    List<TaskDto> findAllByUserAndProject(UserEntity userEntity, ProjectEntity projectEntity);
 }

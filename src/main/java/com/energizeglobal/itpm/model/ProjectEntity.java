@@ -35,11 +35,11 @@ public class ProjectEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_publisher")
-    private UserEntity publisher;
+    private UserEntity creator;
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt;//todo creation date time
 
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "projectEntity")
@@ -54,7 +54,7 @@ public class ProjectEntity {
         return Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(description, that.description) &&
-                ((publisher != null && that.publisher != null) && publisher.getId().equals(that.publisher.getId()))
+                ((creator != null && that.creator != null) && creator.getId().equals(that.creator.getId()))
                 &&
                 Objects.equals(createdAt, that.createdAt) &&
                 Objects.equals(sprintEntities, that.sprintEntities);
@@ -71,7 +71,7 @@ public class ProjectEntity {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", publisher=" + publisher.getId() +
+                ", publisher=" + creator.getId() +
                 ", createdAt=" + createdAt +
                 ", sprintEntities=" + sprintEntities.stream().map(SprintEntity::getId).collect(Collectors.toList()) +
                 '}';
