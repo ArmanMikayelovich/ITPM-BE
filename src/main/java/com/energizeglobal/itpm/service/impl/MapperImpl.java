@@ -76,7 +76,7 @@ public class MapperImpl implements Mapper {
         projectEntity.setId(projectDto.getId());
         projectEntity.setName(projectDto.getName());
         projectEntity.setDescription(projectDto.getDescription());
-        projectEntity.setPublisher(userService.findEntityById(projectDto.getPublisherId()));
+        projectEntity.setCreator(userService.findEntityById(projectDto.getCreatorId()));
         return projectEntity;
     }
 
@@ -86,7 +86,7 @@ public class MapperImpl implements Mapper {
         projectDto.setName(projectEntity.getName());
         projectDto.setDescription(projectEntity.getDescription());
         projectDto.setCreatedAt(projectEntity.getCreatedAt());
-        projectDto.setPublisherId(projectEntity.getPublisher().getId());
+        projectDto.setCreatorId(projectEntity.getCreator().getId());
         return projectDto;
     }
 
@@ -116,11 +116,13 @@ public class MapperImpl implements Mapper {
         if (taskDto.getAssignedUserId() != null && !taskDto.getAssignedUserId().isEmpty()) {
             taskEntity.setAssignedUserEntity(userService.findEntityById(taskDto.getAssignedUserId()));
         }
+        taskEntity.setProjectEntity(projectService.findEntityById(taskDto.getProjectId()));
         taskEntity.setDescription(taskDto.getDescription());
         taskEntity.setName(taskDto.getName());
         taskEntity.setSprintEntity(sprintService.findEntityById(taskDto.getSpringId()));
         taskEntity.setTaskType(taskDto.getTaskType());
         taskEntity.setTaskState(taskDto.getTaskState());
+        taskEntity.setPriority(taskDto.getPriority());
         return taskEntity;
     }
 
@@ -134,8 +136,10 @@ public class MapperImpl implements Mapper {
         if (taskEntity.getAssignedUserEntity() != null) {
             taskDto.setAssignedUserId(taskEntity.getAssignedUserEntity().getId());
         }
+        taskDto.setProjectId(taskEntity.getProjectEntity().getId());
         taskDto.setTaskType(taskEntity.getTaskType());
         taskDto.setTaskState(taskEntity.getTaskState());
+        taskDto.setPriority(taskEntity.getPriority());
         return taskDto;
     }
 

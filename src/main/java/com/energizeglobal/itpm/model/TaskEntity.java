@@ -1,5 +1,6 @@
 package com.energizeglobal.itpm.model;
 
+import com.energizeglobal.itpm.model.enums.TaskPriority;
 import com.energizeglobal.itpm.model.enums.TaskState;
 import com.energizeglobal.itpm.model.enums.TaskType;
 import lombok.Getter;
@@ -32,6 +33,9 @@ public class TaskEntity {
     @Enumerated(EnumType.STRING)
     private TaskState taskState = TaskState.TODO;
 
+    @Enumerated(EnumType.STRING)
+    private TaskPriority priority = TaskPriority.DEFAULT;
+
     @Column(name = "description", length = 1500)
     private String description;
 
@@ -47,6 +51,11 @@ public class TaskEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_sprint_id")
     private SprintEntity sprintEntity;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_project_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+    private ProjectEntity projectEntity;
 
     @Override
     public boolean equals(Object o) {

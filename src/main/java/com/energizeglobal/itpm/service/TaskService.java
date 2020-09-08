@@ -28,4 +28,6 @@ public interface TaskService {
     void remove(Long taskId);
 
     List<TaskDto> findAllByUserAndProject(UserEntity userEntity, ProjectEntity projectEntity);
+
+    void changeTaskPriority(TaskDto taskDto);
 }

@@ -15,6 +15,6 @@ public class ProjectDto {
 
     private LocalDateTime createdAt;
 
-    private String publisherId;
+    private String creatorId;
 
 }

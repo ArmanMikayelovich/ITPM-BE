@@ -126,4 +126,11 @@ public class TaskServiceImpl implements TaskService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
+    public void changeTaskPriority(TaskDto taskDto) {
+        final TaskEntity taskEntity = findEntityById(taskDto.getId());
+        taskEntity.setPriority(taskDto.getPriority());
+        taskRepository.save(taskEntity);
+    }
 }

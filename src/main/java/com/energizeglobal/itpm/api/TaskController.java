@@ -45,11 +45,18 @@ public class TaskController {
         taskService.changeTask(taskDto);
     }
 
+    @PutMapping(value = "change-priority", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void changeTaskPriority(@RequestBody TaskDto taskDto) {
+        log.trace("changing priority of task: " + taskDto.getId() + " to : " + taskDto.getPriority());
+        taskService.changeTaskPriority(taskDto);
+    }
+
     @PutMapping(value = "/change-state", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void changeTaskState(@RequestBody TaskDto taskDto) {
         log.trace("changing state of task : " + taskDto.getId() + "to :" + taskDto.getTaskState());
         taskService.changeTaskState(taskDto.getId(), taskDto.getTaskState());
     }
+
 
     @PutMapping(value = "/attach", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void attachTaskToUser(@RequestBody TaskDto taskDto) {
