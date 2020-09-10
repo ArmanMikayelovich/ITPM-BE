@@ -11,19 +11,24 @@ public class TaskDto {
 
     private String name;
 
-    private String description;
+    private TaskType taskType;
 
-    private Long springId;
+    private TaskState taskState;
+
+    private TaskPriority priority;
+
+    private String description;
 
     private String creatorId;
 
     private String assignedUserId;
 
-    private TaskType taskType;
-
-    private TaskState taskState;
+    private Long springId;
 
     private String projectId;
 
-    private TaskPriority priority;
+    private Long projectVersionId;
+
+    private String[] affectedProjectVersions;
+
 }

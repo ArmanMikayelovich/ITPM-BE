@@ -30,4 +30,6 @@ public interface TaskService {
     List<TaskDto> findAllByUserAndProject(UserEntity userEntity, ProjectEntity projectEntity);
 
     void changeTaskPriority(TaskDto taskDto);
+
+    String[] parseStringToArray(String str);
 }

@@ -57,6 +57,14 @@ public class TaskEntity {
     @JoinColumn(name = "fk_project_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private ProjectEntity projectEntity;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_project_version_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+    private ProjectVersionEntity projectVersionEntity;
+
+    @Column(columnDefinition = "longtext")
+    private String affectedProjectVersions;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

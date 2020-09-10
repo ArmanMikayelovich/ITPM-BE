@@ -31,6 +31,8 @@ public interface Mapper {
 
     UserProjectDto map(UserProjectEntity userProjectEntity, UserProjectDto userProjectDto);
 
+    ProjectVersionEntity map(ProjectVersionDto versionDto, ProjectVersionEntity versionEntity);
 
+    ProjectVersionDto map(ProjectVersionEntity versionEntity, ProjectVersionDto versionDto);
 
 }

@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -124,6 +125,13 @@ public class TaskServiceImpl implements TaskService {
                 .stream()
                 .map(entity -> mapper.map(entity, new TaskDto()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String[] parseStringToArray(String str) {
+        String parsed = str.replace("[", "");
+        parsed = parsed.replace("]", "");
+        return Arrays.stream(parsed.split(",")).toArray(String[]::new);
     }
 
     @Override

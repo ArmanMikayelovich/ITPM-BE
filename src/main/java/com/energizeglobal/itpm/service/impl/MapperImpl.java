@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+
 @Service
 @Transactional
 
@@ -15,15 +17,20 @@ public class MapperImpl implements Mapper {
     private final SprintService sprintService;
     private final TaskService taskService;
     private final ProjectService projectService;
+    private final ProjectVersionService projectVersionService;
+
 
     public MapperImpl(@Lazy UserService userService,
                       @Lazy SprintService sprintService,
                       @Lazy TaskService taskService,
-                      @Lazy ProjectService projectService) {
+                      @Lazy ProjectService projectService,
+                      @Lazy ProjectVersionService projectVersionService) {
+
         this.userService = userService;
         this.sprintService = sprintService;
         this.taskService = taskService;
         this.projectService = projectService;
+        this.projectVersionService = projectVersionService;
     }
 
     @Override
@@ -123,6 +130,13 @@ public class MapperImpl implements Mapper {
         taskEntity.setTaskType(taskDto.getTaskType());
         taskEntity.setTaskState(taskDto.getTaskState());
         taskEntity.setPriority(taskDto.getPriority());
+        taskEntity.setProjectVersionEntity(projectVersionService
+                .findEntityById(taskDto.getProjectVersionId()));
+
+        if (taskDto.getAffectedProjectVersions() != null) {
+            taskEntity.setAffectedProjectVersions(Arrays.toString(taskDto.getAffectedProjectVersions()));
+        }
+
         return taskEntity;
     }
 
@@ -140,6 +154,18 @@ public class MapperImpl implements Mapper {
         taskDto.setTaskType(taskEntity.getTaskType());
         taskDto.setTaskState(taskEntity.getTaskState());
         taskDto.setPriority(taskEntity.getPriority());
+        taskDto.setProjectVersionId(taskEntity.getProjectVersionEntity().getId());
+
+        if (taskEntity.getAffectedProjectVersions() != null &&
+                !taskEntity.getAffectedProjectVersions().isEmpty()) {
+
+            taskDto.setAffectedProjectVersions(
+                    taskService.parseStringToArray(
+                            taskEntity.getAffectedProjectVersions()
+                    )
+            );
+        }
+
         return taskDto;
     }
 
@@ -167,5 +193,22 @@ public class MapperImpl implements Mapper {
         return userProjectDto;
     }
 
+    @Override
+    public ProjectVersionEntity map(ProjectVersionDto versionDto, ProjectVersionEntity versionEntity) {
+        versionEntity.setId(versionDto.getId());
+        versionEntity.setProjectEntity(projectService.findEntityById(versionDto.getProjectId()));
+        versionEntity.setVersion(versionDto.getVersion());
+        versionEntity.setVersionStatus(versionDto.getVersionStatus());
+        return versionEntity;
+    }
 
+    @Override
+    public ProjectVersionDto map(ProjectVersionEntity versionEntity, ProjectVersionDto versionDto) {
+        versionDto.setId(versionEntity.getId());
+        versionDto.setProjectId(versionEntity.getProjectEntity().getId());
+        versionDto.setVersion(versionEntity.getVersion());
+        versionDto.setVersionStatus(versionEntity.getVersionStatus());
+        versionDto.setRegistrationDate(versionEntity.getRegistrationDate());
+        return versionDto;
+    }
 }
