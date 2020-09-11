@@ -2,6 +2,7 @@ package com.energizeglobal.itpm.model.dto;
 
 import com.energizeglobal.itpm.model.enums.TaskPriority;
 import com.energizeglobal.itpm.model.enums.TaskState;
+import com.energizeglobal.itpm.model.enums.TaskTrigger;
 import com.energizeglobal.itpm.model.enums.TaskType;
 import lombok.Data;
 
@@ -31,4 +32,9 @@ public class TaskDto {
 
     private String[] affectedProjectVersions;
 
+    private Long parentId;
+
+    private TaskTrigger triggerType;
+
+    private Long triggeredById;
 }

@@ -32,4 +32,6 @@ public interface TaskService {
     void changeTaskPriority(TaskDto taskDto);
 
     String[] parseStringToArray(String str);
+
+    List<TaskDto> findAllSubTasks(Long taskId);
 }

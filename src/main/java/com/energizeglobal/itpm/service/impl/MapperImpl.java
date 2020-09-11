@@ -137,6 +137,17 @@ public class MapperImpl implements Mapper {
             taskEntity.setAffectedProjectVersions(Arrays.toString(taskDto.getAffectedProjectVersions()));
         }
 
+        if (taskDto.getParentId() != null) {
+            taskEntity.setParent(taskService.findEntityById(taskDto.getParentId()));
+        }
+
+        if (taskDto.getTriggeredById() != null) {
+            taskEntity.setTriggerType(taskDto.getTriggerType());
+            final TaskEntity triggerTaskEntity = taskService.findEntityById(taskDto.getTriggeredById());
+            taskEntity.setTriggeredBy(triggerTaskEntity);
+
+        }
+
         return taskEntity;
     }
 
@@ -164,6 +175,16 @@ public class MapperImpl implements Mapper {
                             taskEntity.getAffectedProjectVersions()
                     )
             );
+        }
+
+        if (taskEntity.getParent() != null) {
+            taskDto.setParentId(taskEntity.getParent().getId());
+        }
+
+
+        if (taskEntity.getTriggeredBy() != null) {
+            taskDto.setTriggerType(taskEntity.getTriggerType());
+            taskDto.setTriggeredById(taskEntity.getTriggeredBy().getId());
         }
 
         return taskDto;

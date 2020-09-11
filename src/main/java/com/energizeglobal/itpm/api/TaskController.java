@@ -71,4 +71,9 @@ public class TaskController {
         taskService.remove(taskId);
     }
 
+    @GetMapping("/{taskId}/sub-tasks")
+    public List<TaskDto> getSubTasks(@PathVariable("taskId") Long taskId) {
+        return taskService.findAllSubTasks(taskId);
+    }
+
 }

@@ -141,4 +141,13 @@ public class TaskServiceImpl implements TaskService {
         taskEntity.setPriority(taskDto.getPriority());
         taskRepository.save(taskEntity);
     }
+
+    @Override
+    public List<TaskDto> findAllSubTasks(Long taskId) {
+        final TaskEntity parent = findEntityById(taskId);
+        final List<TaskEntity> subTasks = taskRepository.findAllByParent(parent);
+        return subTasks.stream()
+                .map(task -> mapper.map(task, new TaskDto())).collect(Collectors.toList());
+
+    }
 }

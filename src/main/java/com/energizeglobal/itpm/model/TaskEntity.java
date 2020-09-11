@@ -2,6 +2,7 @@ package com.energizeglobal.itpm.model;
 
 import com.energizeglobal.itpm.model.enums.TaskPriority;
 import com.energizeglobal.itpm.model.enums.TaskState;
+import com.energizeglobal.itpm.model.enums.TaskTrigger;
 import com.energizeglobal.itpm.model.enums.TaskType;
 import lombok.Getter;
 import lombok.Setter;
@@ -65,8 +66,21 @@ public class TaskEntity {
     @Column(columnDefinition = "longtext")
     private String affectedProjectVersions;
 
+    //    @Column(name = "parent_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+    private TaskEntity parent;
+
+    @Enumerated(value = EnumType.STRING)
+    private TaskTrigger triggerType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "triggered_by", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+    private TaskEntity triggeredBy;
+
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TaskEntity that = (TaskEntity) o;
