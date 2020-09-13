@@ -25,4 +25,6 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
                                              @Param("projectEntity") ProjectEntity projectEntity);
 
     List<TaskEntity> findAllByParent(TaskEntity parent);
+
+    List<TaskEntity> findAllByProjectEntity(ProjectEntity project);
 }

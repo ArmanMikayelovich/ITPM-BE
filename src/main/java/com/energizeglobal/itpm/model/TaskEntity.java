@@ -50,7 +50,7 @@ public class TaskEntity {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_sprint_id")
+    @JoinColumn(name = "fk_sprint_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private SprintEntity sprintEntity;
 
 

@@ -7,15 +7,13 @@ import com.energizeglobal.itpm.model.UserEntity;
 import com.energizeglobal.itpm.model.dto.TaskDto;
 import com.energizeglobal.itpm.model.enums.TaskState;
 import com.energizeglobal.itpm.repository.TaskRepository;
-import com.energizeglobal.itpm.service.Mapper;
-import com.energizeglobal.itpm.service.SprintService;
-import com.energizeglobal.itpm.service.TaskService;
-import com.energizeglobal.itpm.service.UserService;
+import com.energizeglobal.itpm.service.*;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,13 +29,19 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final UserService userService;
     private final SprintService sprintService;
+    private final ProjectService projectService;
+    private final ProjectVersionService projectVersionService;
 
     public TaskServiceImpl(Mapper mapper, TaskRepository taskRepository,
-                           @Lazy UserService userService, @Lazy SprintService sprintService) {
+                           @Lazy UserService userService, @Lazy SprintService sprintService,
+                           @Lazy ProjectService projectService, @Lazy ProjectVersionService projectVersionService) {
+
         this.mapper = mapper;
         this.taskRepository = taskRepository;
         this.userService = userService;
         this.sprintService = sprintService;
+        this.projectService = projectService;
+        this.projectVersionService = projectVersionService;
     }
 
     @Override
@@ -73,7 +77,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void addTaskToSprint(TaskDto taskDto) {
+    public void addTaskToSprint(TaskDto taskDto, MultipartFile[] uploadedFiles) {
         taskDto.setId(null);
         log.trace("Adding task to Sprint: " + taskDto);
         final TaskEntity mappedTaskEntity = mapper.map(taskDto, new TaskEntity());
@@ -150,4 +154,44 @@ public class TaskServiceImpl implements TaskService {
                 .map(task -> mapper.map(task, new TaskDto())).collect(Collectors.toList());
 
     }
+
+    @Override
+    public List<TaskDto> findAllByProjectId(String projectId) {
+        final ProjectEntity projectEntity = projectService.findEntityById(projectId);
+        final List<TaskEntity> taskEntities = taskRepository.findAllByProjectEntity(projectEntity);
+        return taskEntities.stream()
+                .map(taskEntity -> mapper.map(taskEntity, new TaskDto()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void cloneTask(TaskDto taskDto) {
+/**
+ "creatorId": "dnum enq clone anox-i ID",
+ "description": "string",
+
+ "name": "string",
+
+ "priority": "LOW",
+ "projectId": "string",
+ "projectVersionId": 0,
+ "taskState": "TODO",
+ "taskType": "TASK",
+ */
+        final TaskEntity taskEntity = findEntityById(taskDto.getId());
+        final TaskEntity clone = new TaskEntity();
+
+        clone.setCreatorUserEntity(userService.findEntityById(taskDto.getCreatorId()));
+        clone.setDescription(taskEntity.getDescription());
+        clone.setName(taskEntity.getName());
+        clone.setPriority(taskEntity.getPriority());
+        clone.setProjectEntity(projectService.findEntityById(taskDto.getProjectId()));
+        clone.setProjectVersionEntity(projectVersionService.findEntityById(taskDto.getProjectVersionId()));
+        clone.setTaskState(taskEntity.getTaskState());
+        clone.setTaskType(taskEntity.getTaskType());
+        taskRepository.save(clone);
+    }
+
+
 }

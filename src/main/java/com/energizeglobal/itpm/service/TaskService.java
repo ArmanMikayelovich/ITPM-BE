@@ -6,6 +6,7 @@ import com.energizeglobal.itpm.model.UserEntity;
 import com.energizeglobal.itpm.model.dto.TaskDto;
 import com.energizeglobal.itpm.model.enums.TaskState;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface TaskService {
 
     List<TaskDto> findAllBySprintAndState(Long sprintId, TaskState taskState);
 
-    void addTaskToSprint(TaskDto taskDto);
+    void addTaskToSprint(TaskDto taskDto, MultipartFile[] uploadedFiles);
 
     void attachTaskToUser(Long taskId, String userId);
 
@@ -34,4 +35,8 @@ public interface TaskService {
     String[] parseStringToArray(String str);
 
     List<TaskDto> findAllSubTasks(Long taskId);
+
+    List<TaskDto> findAllByProjectId(String projectId);
+
+    void cloneTask(TaskDto taskDto);
 }

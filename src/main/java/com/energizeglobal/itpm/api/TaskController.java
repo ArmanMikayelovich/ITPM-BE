@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,11 +34,12 @@ public class TaskController {
     }
 
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void addTaskToSprint(@RequestBody TaskDto taskDto) {
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public void addTaskToSprint(TaskDto taskDto, MultipartFile[] uploadedFiles) {
         log.trace("adding task in sprint: " + taskDto);
-        taskService.addTaskToSprint(taskDto);
+        taskService.addTaskToSprint(taskDto, uploadedFiles);
     }
+
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void updateTask(@RequestBody TaskDto taskDto) {
@@ -76,4 +78,15 @@ public class TaskController {
         return taskService.findAllSubTasks(taskId);
     }
 
+    @GetMapping(value = "/by-project/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<TaskDto> getTasksByProject(@PathVariable("projectId") String projectId) {
+        log.trace("searching all tasks of project : " + projectId);
+        return taskService.findAllByProjectId(projectId);
+    }
+
+    @PostMapping(value = "/clone", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void cloneTaskToProject(@RequestBody TaskDto taskDto) {
+        log.trace("cloning task: " + taskDto.getId() + " to project: " + taskDto.getProjectId());
+        taskService.cloneTask(taskDto);
+    }
 }

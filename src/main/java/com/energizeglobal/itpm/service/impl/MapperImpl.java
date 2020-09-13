@@ -126,7 +126,9 @@ public class MapperImpl implements Mapper {
         taskEntity.setProjectEntity(projectService.findEntityById(taskDto.getProjectId()));
         taskEntity.setDescription(taskDto.getDescription());
         taskEntity.setName(taskDto.getName());
-        taskEntity.setSprintEntity(sprintService.findEntityById(taskDto.getSpringId()));
+        if (taskDto.getSpringId() != null) {
+            taskEntity.setSprintEntity(sprintService.findEntityById(taskDto.getSpringId()));
+        }
         taskEntity.setTaskType(taskDto.getTaskType());
         taskEntity.setTaskState(taskDto.getTaskState());
         taskEntity.setPriority(taskDto.getPriority());
