@@ -39,4 +39,6 @@ public interface TaskService {
     List<TaskDto> findAllByProjectId(String projectId);
 
     void cloneTask(TaskDto taskDto);
+
+    void moveTaskToAnotherProject(TaskDto taskDto);
 }

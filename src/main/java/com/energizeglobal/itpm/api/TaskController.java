@@ -89,4 +89,10 @@ public class TaskController {
         log.trace("cloning task: " + taskDto.getId() + " to project: " + taskDto.getProjectId());
         taskService.cloneTask(taskDto);
     }
+
+    @PostMapping(value = "/move", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void moveTaskToAnotherProject(TaskDto taskDto) {
+        log.trace("moving task: " + taskDto.getId() + " to project: " + taskDto.getProjectId());
+        taskService.moveTaskToAnotherProject(taskDto);
+    }
 }

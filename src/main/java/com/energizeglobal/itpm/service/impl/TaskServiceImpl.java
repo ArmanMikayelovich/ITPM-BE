@@ -1,9 +1,6 @@
 package com.energizeglobal.itpm.service.impl;
 
-import com.energizeglobal.itpm.model.ProjectEntity;
-import com.energizeglobal.itpm.model.SprintEntity;
-import com.energizeglobal.itpm.model.TaskEntity;
-import com.energizeglobal.itpm.model.UserEntity;
+import com.energizeglobal.itpm.model.*;
 import com.energizeglobal.itpm.model.dto.TaskDto;
 import com.energizeglobal.itpm.model.enums.TaskState;
 import com.energizeglobal.itpm.repository.TaskRepository;
@@ -15,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -167,31 +165,75 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public void cloneTask(TaskDto taskDto) {
-/**
- "creatorId": "dnum enq clone anox-i ID",
- "description": "string",
-
- "name": "string",
-
- "priority": "LOW",
- "projectId": "string",
- "projectVersionId": 0,
- "taskState": "TODO",
- "taskType": "TASK",
- */
-        final TaskEntity taskEntity = findEntityById(taskDto.getId());
-        final TaskEntity clone = new TaskEntity();
-
-        clone.setCreatorUserEntity(userService.findEntityById(taskDto.getCreatorId()));
-        clone.setDescription(taskEntity.getDescription());
-        clone.setName(taskEntity.getName());
-        clone.setPriority(taskEntity.getPriority());
-        clone.setProjectEntity(projectService.findEntityById(taskDto.getProjectId()));
-        clone.setProjectVersionEntity(projectVersionService.findEntityById(taskDto.getProjectVersionId()));
-        clone.setTaskState(taskEntity.getTaskState());
-        clone.setTaskType(taskEntity.getTaskType());
+        final TaskEntity clone = cloneProperties(taskDto);
         taskRepository.save(clone);
+        cloneChildren(taskDto, clone);
     }
 
+    @Transactional
+    public void cloneChildren(TaskDto taskDto, TaskEntity newParent) {
+        final List<TaskEntity> children = taskRepository
+                .findAllByParent(findEntityById(taskDto.getId()));
+        final ArrayList<TaskEntity> newChildren = new ArrayList<>();
+        for (TaskEntity source : children) {
+            final TaskEntity dest = new TaskEntity();
+            dest.setCreatorUserEntity(newParent.getCreatorUserEntity());
+            dest.setDescription(source.getDescription());
+            dest.setName(source.getName());
+            dest.setPriority(source.getPriority());
+            dest.setProjectEntity(newParent.getProjectEntity());
+            dest.setProjectVersionEntity(newParent.getProjectVersionEntity());
+            dest.setTaskState(source.getTaskState());
+            dest.setTaskType(source.getTaskType());
+            dest.setParent(newParent);
+            newChildren.add(dest);
+        }
+
+        taskRepository.saveAll(newChildren);
+    }
+
+
+    protected TaskEntity cloneProperties(TaskDto taskDto) {
+        final TaskEntity source = findEntityById(taskDto.getId());
+        final TaskEntity dest = new TaskEntity();
+        dest.setCreatorUserEntity(userService.findEntityById(taskDto.getCreatorId()));
+        dest.setDescription(source.getDescription());
+        dest.setName(source.getName());
+        dest.setPriority(source.getPriority());
+        dest.setProjectEntity(projectService.findEntityById(taskDto.getProjectId()));
+        dest.setProjectVersionEntity(projectVersionService.findEntityById(taskDto.getProjectVersionId()));
+        dest.setTaskState(source.getTaskState());
+        dest.setTaskType(source.getTaskType());
+        return dest;
+    }
+
+
+    @Override
+    @Transactional
+    public void moveTaskToAnotherProject(TaskDto taskDto) {
+        final TaskEntity taskEntity = findEntityById(taskDto.getId());
+        final List<TaskEntity> children = taskRepository.findAllByParent(taskEntity);
+
+        final ProjectEntity newProject = projectService.findEntityById(taskDto.getProjectId());
+
+        final ProjectVersionEntity newProjectVersion = projectVersionService.findEntityById(taskDto.getProjectVersionId());
+
+        taskEntity.setProjectEntity(newProject);
+        taskEntity.setProjectVersionEntity(newProjectVersion);
+        taskEntity.setAffectedProjectVersions("");
+        taskEntity.setTriggeredBy(null);
+        taskEntity.setTriggerType(null);
+
+        for (TaskEntity child : children) {
+            child.setProjectEntity(newProject);
+            child.setProjectVersionEntity(newProjectVersion);
+            child.setAffectedProjectVersions("");
+            child.setTriggeredBy(null);
+            child.setTriggerType(null);
+        }
+
+        taskRepository.save(taskEntity);
+        taskRepository.saveAll(children);
+    }
 
 }
