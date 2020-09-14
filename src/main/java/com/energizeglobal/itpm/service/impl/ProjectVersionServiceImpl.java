@@ -8,6 +8,7 @@ import com.energizeglobal.itpm.repository.ProjectVersionRepository;
 import com.energizeglobal.itpm.service.Mapper;
 import com.energizeglobal.itpm.service.ProjectService;
 import com.energizeglobal.itpm.service.ProjectVersionService;
+import com.energizeglobal.itpm.util.exceptions.AlreadyExistsException;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -35,6 +36,11 @@ public class ProjectVersionServiceImpl implements ProjectVersionService {
     @Override
     @Transactional
     public void createNewVersion(ProjectVersionDto versionDto) {
+        final ProjectEntity projectEntity = projectService.findEntityById(versionDto.getProjectId());
+        versionRepository.findByProjectEntityAndVersion(projectEntity, versionDto.getVersion()).ifPresent(ignored -> {
+            throw new AlreadyExistsException("Project version with name " + versionDto.getVersion() + " already exists");
+        });
+
         final ProjectVersionEntity map = mapper.map(versionDto, new ProjectVersionEntity());
         versionRepository.save(map);
     }

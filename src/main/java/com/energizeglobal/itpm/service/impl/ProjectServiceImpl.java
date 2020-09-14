@@ -4,6 +4,7 @@ import com.energizeglobal.itpm.model.ProjectEntity;
 import com.energizeglobal.itpm.model.UserEntity;
 import com.energizeglobal.itpm.model.UserProjectEntity;
 import com.energizeglobal.itpm.model.dto.ProjectDto;
+import com.energizeglobal.itpm.model.enums.UserRole;
 import com.energizeglobal.itpm.repository.ProjectRepository;
 import com.energizeglobal.itpm.repository.UserProjectRepository;
 import com.energizeglobal.itpm.service.Mapper;
@@ -37,12 +38,18 @@ public class ProjectServiceImpl implements ProjectService {
         log.trace("creating Project: " + projectDto);
         projectDto.setCreatedAt(null);
 
+
         projectRepository.findById(projectDto.getId()).ifPresent(projectEntity -> {
             throw new AlreadyExistsException("Project with key: " + projectDto.getId() + " already exists.");
         });
-
         final ProjectEntity projectEntity = mapper.map(projectDto, new ProjectEntity());
         projectRepository.save(projectEntity);
+        final UserEntity creator = userService.findEntityById(projectDto.getCreatorId());
+        final UserProjectEntity userProjectEntity = new UserProjectEntity();
+        userProjectEntity.setUserEntity(creator);
+        userProjectEntity.setProjectEntity(projectEntity);
+        userProjectEntity.setRole(UserRole.ADMINISTRATORS);
+        userProjectRepository.save(userProjectEntity);
         log.trace("Project created: " + projectEntity);
     }
 

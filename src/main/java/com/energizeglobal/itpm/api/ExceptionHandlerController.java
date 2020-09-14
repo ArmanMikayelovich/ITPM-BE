@@ -1,6 +1,7 @@
 package com.energizeglobal.itpm.api;
 
 import com.energizeglobal.itpm.util.ApiError;
+import com.energizeglobal.itpm.util.exceptions.AlreadyExistsException;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,4 +16,10 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(new ApiError(exception.getMessage(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleAlreadyExistsException(AlreadyExistsException exception) {
+        return new ResponseEntity<>(new ApiError(exception.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+    }
+
 }
+
