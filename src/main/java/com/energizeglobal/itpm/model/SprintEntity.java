@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,9 @@ public class SprintEntity {
     @Column(updatable = false)
     private Long id;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_project_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -40,8 +44,11 @@ public class SprintEntity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime creationTimestamp;
 
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
     @Column(name = "dead_line")
-    private LocalDateTime deadLine;
+    private LocalDate deadLine;
 
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "sprintEntity", fetch = FetchType.LAZY)
@@ -51,6 +58,9 @@ public class SprintEntity {
     @Column(name = "is_running")
     private Boolean isRunning = Boolean.FALSE;
 
+
+    @Column(name = "is_finished")
+    private Boolean isFinished = Boolean.FALSE;
 
     @Override
     public boolean equals(Object o) {

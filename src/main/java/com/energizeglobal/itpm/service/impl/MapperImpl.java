@@ -103,6 +103,11 @@ public class MapperImpl implements Mapper {
         sprintEntity.setProjectEntity(projectService.findEntityById(sprintDto.getProjectId()));
         sprintEntity.setCreatorUserEntity(userService.findEntityById(sprintDto.getCreatorId()));
         sprintEntity.setDeadLine(sprintDto.getDeadLine());
+        sprintEntity.setName(sprintDto.getName());
+        sprintEntity.setStartDate(sprintDto.getStartDate());
+        sprintEntity.setDeadLine(sprintDto.getDeadLine());
+        sprintEntity.setIsRunning(sprintDto.getIsRunning());
+        sprintEntity.setIsFinished(sprintDto.getIsFinished());
         return sprintEntity;
     }
 
@@ -113,6 +118,11 @@ public class MapperImpl implements Mapper {
         sprintDto.setCreatorId(source.getCreatorUserEntity().getId());
         sprintDto.setCreationTimestamp(source.getCreationTimestamp());
         sprintDto.setDeadLine(source.getDeadLine());
+        sprintDto.setName(source.getName());
+        sprintDto.setStartDate(source.getStartDate());
+        sprintDto.setDeadLine(source.getDeadLine());
+        sprintDto.setIsRunning(source.getIsRunning());
+        sprintDto.setIsFinished(source.getIsFinished());
         return sprintDto;
     }
 
@@ -126,8 +136,8 @@ public class MapperImpl implements Mapper {
         taskEntity.setProjectEntity(projectService.findEntityById(taskDto.getProjectId()));
         taskEntity.setDescription(taskDto.getDescription());
         taskEntity.setName(taskDto.getName());
-        if (taskDto.getSpringId() != null) {
-            taskEntity.setSprintEntity(sprintService.findEntityById(taskDto.getSpringId()));
+        if (taskDto.getSprintId() != null) {
+            taskEntity.setSprintEntity(sprintService.findEntityById(taskDto.getSprintId()));
         }
         taskEntity.setTaskType(taskDto.getTaskType());
         taskEntity.setTaskState(taskDto.getTaskState());
@@ -159,7 +169,7 @@ public class MapperImpl implements Mapper {
         taskDto.setName(taskEntity.getName());
         taskDto.setDescription(taskEntity.getDescription());
         if (taskEntity.getSprintEntity() != null) {
-            taskDto.setSpringId(taskEntity.getSprintEntity().getId());
+            taskDto.setSprintId(taskEntity.getSprintEntity().getId());
         }
         taskDto.setCreatorId(taskEntity.getCreatorUserEntity().getId());
         if (taskEntity.getAssignedUserEntity() != null) {

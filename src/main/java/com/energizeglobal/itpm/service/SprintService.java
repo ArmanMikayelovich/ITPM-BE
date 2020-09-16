@@ -5,6 +5,9 @@ import com.energizeglobal.itpm.model.dto.SprintDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public interface SprintService {
@@ -18,4 +21,10 @@ public interface SprintService {
 
     SprintDto findActiveSprintByProjectId(String projectId);
 
+    @Transactional
+    void startSprint(SprintDto sprintDto);
+
+    SprintDto findById(Long sprintId);
+
+    List<SprintDto> findAllSprintWhichNotFinished(String projectId);
 }

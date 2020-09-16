@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/sprints")
@@ -18,15 +20,28 @@ public class SprintController {
 
     private final SprintService sprintService;
 
+    @GetMapping(value = "/{sprintId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public SprintDto getById(@PathVariable("sprintId") Long sprintId) {
+        log.trace("searching sprint by id: " + sprintId);
+        return sprintService.findById(sprintId);
+    }
+
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void addSprint(@RequestBody SprintDto sprintDto) {
+
         log.trace("creating Sprint: " + sprintDto);
         sprintService.addSprintToProject(sprintDto);
     }
 
+    @GetMapping(value = "/by-project/{projectId}/not-finished", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<SprintDto> getAllNotFinishedSprintsOfProject(@PathVariable("projectId") String projectId) {
+        log.trace("Searching all not finished sprints of project: " + projectId);
+        return sprintService.findAllSprintWhichNotFinished(projectId);
+    }
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void changeDeadline(@RequestBody SprintDto sprintDto) {
+
         log.trace("Changing deadline of sprint with id: " + sprintDto
                 + " to " + sprintDto.getDeadLine());
         sprintService.changeDeadLine(sprintDto);
@@ -43,5 +58,11 @@ public class SprintController {
     public SprintDto findActiveSprintOfProject(@PathVariable("projectId") String projectId) {
         log.trace("Searching active sprint of project: " + projectId);
         return sprintService.findActiveSprintByProjectId(projectId);
+    }
+
+    @PutMapping(value = "/start", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void startSprint(@RequestBody SprintDto sprintDto) {
+        log.trace("starting sprint: " + sprintDto);
+        sprintService.startSprint(sprintDto);
     }
 }

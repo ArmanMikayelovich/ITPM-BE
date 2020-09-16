@@ -5,6 +5,7 @@ import com.energizeglobal.itpm.model.SprintEntity;
 import com.energizeglobal.itpm.model.TaskEntity;
 import com.energizeglobal.itpm.model.UserEntity;
 import com.energizeglobal.itpm.model.enums.TaskState;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +18,8 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
     @Query("select t from TaskEntity  t where t.sprintEntity=:sprintEntity and t.taskState=:taskState")
     List<TaskEntity> findAllBySprintAndState(@Param("sprintEntity") SprintEntity sprintEntity, @Param("taskState") TaskState taskState);
 
+    List<TaskEntity> findAllBySprintEntity(SprintEntity sprintEntity);
+
     @Query("select t from TaskEntity t " +
             "where (t.sprintEntity.projectEntity=:projectEntity " +
             "AND " +
@@ -27,4 +30,7 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
     List<TaskEntity> findAllByParent(TaskEntity parent);
 
     List<TaskEntity> findAllByProjectEntity(ProjectEntity project);
+
+    List<TaskEntity> findAllByProjectEntityAndSprintEntityNull(ProjectEntity projectEntity, Sort sort);
+
 }

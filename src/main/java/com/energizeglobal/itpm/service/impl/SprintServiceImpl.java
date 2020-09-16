@@ -7,6 +7,7 @@ import com.energizeglobal.itpm.repository.SprintRepository;
 import com.energizeglobal.itpm.service.Mapper;
 import com.energizeglobal.itpm.service.ProjectService;
 import com.energizeglobal.itpm.service.SprintService;
+import com.energizeglobal.itpm.util.exceptions.InvalidActionException;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
@@ -15,7 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -33,6 +37,8 @@ public class SprintServiceImpl implements SprintService {
         log.trace("adding sprint to Project: " + sprintDto);
         final SprintEntity sprintEntity = new SprintEntity();
         mapper.map(sprintDto, sprintEntity);
+        sprintEntity.setIsFinished(false);
+        sprintEntity.setIsRunning(false);
         sprintRepository.save(sprintEntity);
         log.trace("Sprint attached to Project: " + sprintEntity);
     }
@@ -81,5 +87,38 @@ public class SprintServiceImpl implements SprintService {
         final Optional<SprintEntity> sprintEntityOptional = sprintRepository.findByProjectEntityAndIsRunningTrue(projectEntity);
         final SprintEntity sprintEntity = sprintEntityOptional.orElseThrow(() -> new NotFoundException("Sprint not found"));
         return mapper.map(sprintEntity, new SprintDto());
+    }
+
+    @Override
+    @Transactional
+    public void startSprint(SprintDto sprintDto) {
+        final SprintEntity sprintEntity = findEntityById(sprintDto.getId());
+        final ProjectEntity projectEntity = sprintEntity.getProjectEntity();
+        for (SprintEntity sprint : projectEntity.getSprintEntities()) {
+            final boolean isSprintRunning = sprint.getIsRunning();
+            if (isSprintRunning) {
+                throw new InvalidActionException("A one sprint has already been launched in the project.");
+            }
+        }
+
+        sprintEntity.setStartDate(LocalDate.now());
+        sprintEntity.setDeadLine(sprintDto.getDeadLine());
+        sprintEntity.setIsRunning(true);
+        sprintRepository.save(sprintEntity);
+    }
+
+    @Override
+    public SprintDto findById(Long sprintId) {
+        final SprintEntity sprintEntity = findEntityById(sprintId);
+        return mapper.map(sprintEntity, new SprintDto());
+    }
+
+    @Override
+    public List<SprintDto> findAllSprintWhichNotFinished(String projectId) {
+        final ProjectEntity projectEntity = projectService.findEntityById(projectId);
+        log.trace("Searching all");
+        return sprintRepository.findAllByProjectEntityAndIsFinishedFalse(projectEntity)
+                .stream().map(sprintEntity -> mapper.map(sprintEntity, new SprintDto()))
+                .collect(Collectors.toList());
     }
 }

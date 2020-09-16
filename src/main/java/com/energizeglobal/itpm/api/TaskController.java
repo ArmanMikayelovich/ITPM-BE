@@ -5,6 +5,7 @@ import com.energizeglobal.itpm.model.enums.TaskState;
 import com.energizeglobal.itpm.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,13 +30,19 @@ public class TaskController {
     @GetMapping(value = "/by-sprint/{sprintId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<TaskDto> findBySprintIdAndState(@PathVariable("sprintId") Long sprintId,
                                                 @RequestParam(required = false) TaskState taskState) {
-        log.trace("searching all tasks by Sprint: " + sprintId + " and state: " + taskState.toString());
-        return taskService.findAllBySprintAndState(sprintId, taskState);
+        log.trace("searching all tasks by Sprint: " + sprintId + " and state: " + taskState);
+        if (taskState != null) {
+            return taskService.findAllBySprintAndState(sprintId, taskState);
+        } else {
+            return taskService.findAllBySprintId(sprintId);
+        }
+
+
     }
 
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public void addTaskToSprint(TaskDto taskDto, MultipartFile[] uploadedFiles) {
+    public void createTask(TaskDto taskDto, MultipartFile[] uploadedFiles) {
         log.trace("adding task in sprint: " + taskDto);
         taskService.addTaskToSprint(taskDto, uploadedFiles);
     }
@@ -94,5 +101,32 @@ public class TaskController {
     public void moveTaskToAnotherProject(TaskDto taskDto) {
         log.trace("moving task: " + taskDto.getId() + " to project: " + taskDto.getProjectId());
         taskService.moveTaskToAnotherProject(taskDto);
+    }
+
+    @GetMapping(value = "/by-project/{projectId}/free")
+    public List<TaskDto> findAllFreeTasksOfProject(@PathVariable("projectId") String projectId,
+                                                   @RequestParam(name = "sort", required = false) String sortProperty,
+                                                   @RequestParam(required = false) String direction) {
+        log.trace("searching all free tasks of project: " + projectId);
+
+        if (sortProperty == null && direction == null) {
+            return taskService.findAllFreeTasksOfProject(projectId, Sort.unsorted());
+        }
+
+        final Sort sort = Sort.by(Sort.Direction.fromString(direction), sortProperty);
+        return taskService.findAllFreeTasksOfProject(projectId, sort);
+    }
+
+    @PutMapping(value = "/attach-to-sprint", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void attachTaskToSprint(@RequestBody TaskDto taskDto) {
+        log.trace("attaching task: " + taskDto.getId() + "to sprint: " + taskDto.getSprintId());
+        taskService.attachTaskToSprint(taskDto);
+    }
+
+
+    @PutMapping(value = "/detach-from-sprint/{taskId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void detachTaskFromSprint(@PathVariable("taskId") Long taskId) {
+        log.trace("detaching task: " + taskId + "from sprint");
+        taskService.detachTaskFromSprint(taskId);
     }
 }

@@ -8,6 +8,7 @@ import com.energizeglobal.itpm.service.*;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -234,6 +235,42 @@ public class TaskServiceImpl implements TaskService {
 
         taskRepository.save(taskEntity);
         taskRepository.saveAll(children);
+    }
+
+    @Override
+    public List<TaskDto> findAllFreeTasksOfProject(String projectId, Sort sort) {
+        final ProjectEntity projectEntity = projectService.findEntityById(projectId);
+        return taskRepository.findAllByProjectEntityAndSprintEntityNull(projectEntity, sort)
+                .stream()
+                .map(taskEntity -> mapper.map(taskEntity, new TaskDto()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void attachTaskToSprint(TaskDto taskDto) {
+        log.trace("attaching task:" + taskDto.getId() + " to sprint: " + taskDto.getSprintId());
+        final TaskEntity taskEntity = findEntityById(taskDto.getId());
+        final SprintEntity sprintEntity = sprintService.findEntityById(taskDto.getSprintId());
+        taskEntity.setSprintEntity(sprintEntity);
+        taskRepository.save(taskEntity);
+    }
+
+    @Override
+    @Transactional
+    public void detachTaskFromSprint(Long taskId) {
+        final TaskEntity taskEntity = findEntityById(taskId);
+        log.trace("detaching task: " + taskEntity.getId() + " from sprint: " + taskEntity.getSprintEntity().getId());
+        taskEntity.setSprintEntity(null);
+        taskRepository.save(taskEntity);
+    }
+
+    @Override
+    public List<TaskDto> findAllBySprintId(Long sprintId) {
+        log.trace("Searching tasks in sprint: " + sprintId);
+        final SprintEntity sprintEntity = sprintService.findEntityById(sprintId);
+        return taskRepository.findAllBySprintEntity(sprintEntity).stream()
+                .map(taskEntity -> mapper.map(taskEntity, new TaskDto())).collect(Collectors.toList());
     }
 
 }

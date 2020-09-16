@@ -24,7 +24,7 @@ public class TaskDto {
 
     private String assignedUserId;
 
-    private Long springId;
+    private Long sprintId;
 
     private String projectId;
 

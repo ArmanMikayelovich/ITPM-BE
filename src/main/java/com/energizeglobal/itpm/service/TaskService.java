@@ -5,6 +5,7 @@ import com.energizeglobal.itpm.model.TaskEntity;
 import com.energizeglobal.itpm.model.UserEntity;
 import com.energizeglobal.itpm.model.dto.TaskDto;
 import com.energizeglobal.itpm.model.enums.TaskState;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,4 +42,13 @@ public interface TaskService {
     void cloneTask(TaskDto taskDto);
 
     void moveTaskToAnotherProject(TaskDto taskDto);
+
+
+    List<TaskDto> findAllFreeTasksOfProject(String projectId, Sort sort);
+
+    void attachTaskToSprint(TaskDto taskDto);
+
+    void detachTaskFromSprint(Long taskId);
+
+    List<TaskDto> findAllBySprintId(Long sprintId);
 }
