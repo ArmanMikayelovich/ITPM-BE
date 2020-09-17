@@ -2,6 +2,7 @@ package com.energizeglobal.itpm.api;
 
 import com.energizeglobal.itpm.model.dto.ProjectDto;
 import com.energizeglobal.itpm.model.dto.ProjectVersionDto;
+import com.energizeglobal.itpm.model.dto.UserProjectDto;
 import com.energizeglobal.itpm.model.enums.ProjectVersionStatus;
 import com.energizeglobal.itpm.service.ProjectService;
 import com.energizeglobal.itpm.service.ProjectVersionService;
@@ -74,8 +75,14 @@ public class ProjectController {
         }
     }
 
+    @PostMapping(value = "/attach-user-to-project", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void attachUserToProject(@RequestBody UserProjectDto userProjectDto) {
+        projectService.attachUserToProject(userProjectDto);
+    }
+
     @GetMapping(value = "/versions/{versionId}")
     public ProjectVersionDto getProjectVersionById(@PathVariable Long versionId) {
+
         log.trace("Searching version with id: " + versionId);
         return versionService.findById(versionId);
     }

@@ -2,6 +2,7 @@ package com.energizeglobal.itpm.api;
 
 import com.energizeglobal.itpm.model.dto.CommentDto;
 import com.energizeglobal.itpm.service.CommentService;
+import com.energizeglobal.itpm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ public class CommentController {
     private static final Logger log = Logger.getLogger(CommentController.class);
 
     private final CommentService commentService;
+    private final UserService userService;
 
     @GetMapping(value = "/comments/{commentId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public CommentDto findById(@PathVariable("commentId") Long commentId) {
@@ -38,6 +40,11 @@ public class CommentController {
         commentDto.setTaskId(taskId);
         log.trace("adding comment: " + commentDto);
         commentService.createComment(commentDto);
+
+        for (String userId : commentDto.getNotificationUsers()) {
+            userService.sendMailNotificationOfComment(userId, commentDto.getTaskId());
+        }
+
     }
 
     @PutMapping(value = "/{taskId}/comments",

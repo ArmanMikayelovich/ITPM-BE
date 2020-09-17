@@ -3,11 +3,13 @@ package com.energizeglobal.itpm.api;
 import com.energizeglobal.itpm.model.dto.TaskDto;
 import com.energizeglobal.itpm.model.dto.UserDto;
 import com.energizeglobal.itpm.model.dto.UserProjectDto;
+import com.energizeglobal.itpm.service.TaskService;
 import com.energizeglobal.itpm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -25,6 +27,7 @@ public class UserController {
     private static final Logger log = Logger.getLogger(UserController.class);
 
     private final UserService userService;
+    private final TaskService taskService;
 
     //EXAMPLE
 // TODO DELETE AFTER INVESTIGATING
@@ -83,7 +86,18 @@ public class UserController {
 
     @GetMapping(value = "/{userId}/projects/{projectId}/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<TaskDto>> getUserTasksInProject(@PathVariable("userId") String userId,
-                                                            @PathVariable("projectId") String projectId) {
-        return userService.getUsersTasksInProject(userId, projectId);
+                                                            @PathVariable("projectId") String projectId,
+                                                            @RequestParam(name = "sort", required = false)
+                                                                    String sortProperty,
+                                                            @RequestParam(required = false) String direction) {
+
+        if (sortProperty == null || direction == null) {
+            return taskService.getUsersTasksInProject(userId, projectId, Sort.unsorted());
+        } else {
+            Sort sort = Sort.by(Sort.Direction.fromString(direction), sortProperty);
+            return taskService.getUsersTasksInProject(userId, projectId, sort);
+        }
+
+
     }
 }

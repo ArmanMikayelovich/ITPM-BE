@@ -4,6 +4,7 @@ import com.energizeglobal.itpm.model.ProjectEntity;
 import com.energizeglobal.itpm.model.UserEntity;
 import com.energizeglobal.itpm.model.UserProjectEntity;
 import com.energizeglobal.itpm.model.dto.ProjectDto;
+import com.energizeglobal.itpm.model.dto.UserProjectDto;
 import com.energizeglobal.itpm.model.enums.UserRole;
 import com.energizeglobal.itpm.repository.ProjectRepository;
 import com.energizeglobal.itpm.repository.UserProjectRepository;
@@ -103,4 +104,15 @@ public class ProjectServiceImpl implements ProjectService {
                 .map(entity -> mapper.map(entity.getProjectEntity(), new ProjectDto()));
     }
 
+    @Override
+    @Transactional
+    public void attachUserToProject(UserProjectDto userProjectDto) {
+        final UserEntity userEntity = userService.findByEmail(userProjectDto.getEmail());
+        final ProjectEntity projectEntity = findEntityById(userProjectDto.getProjectId());
+        final UserProjectEntity userProjectEntity = new UserProjectEntity();
+        userProjectEntity.setUserEntity(userEntity);
+        userProjectEntity.setProjectEntity(projectEntity);
+        userProjectEntity.setRole(userProjectDto.getRole());
+        userProjectRepository.save(userProjectEntity);
+    }
 }

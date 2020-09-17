@@ -5,6 +5,7 @@ import com.energizeglobal.itpm.model.dto.TaskDto;
 import com.energizeglobal.itpm.model.enums.TaskState;
 import com.energizeglobal.itpm.repository.TaskRepository;
 import com.energizeglobal.itpm.service.*;
+import com.energizeglobal.itpm.util.TaskPriorityComparator;
 import com.energizeglobal.itpm.util.exceptions.NotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Lazy;
@@ -13,17 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
 public class TaskServiceImpl implements TaskService {
     private static final Logger log = Logger.getLogger(TaskServiceImpl.class);
-
+    private static final String CREATED = "created";
     private final Mapper mapper;
     private final TaskRepository taskRepository;
     private final UserService userService;
@@ -123,11 +121,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDto> findAllByUserAndProject(UserEntity userEntity, ProjectEntity projectEntity) {
-        return taskRepository.findAllByUserAndProject(userEntity, projectEntity)
+    public List<TaskDto> findAllByUserAndProject(UserEntity userEntity, ProjectEntity projectEntity, Sort sort) {
+        if (sort != null) {
+            return taskRepository.findAllByUserAndProject(userEntity, projectEntity, sort)
+                    .stream()
+                    .map(entity -> mapper.map(entity, new TaskDto()))
+                    .collect(Collectors.toList());
+        }
+        return taskRepository.findAllByUserAndProject(userEntity, projectEntity, Sort.unsorted())
                 .stream()
                 .map(entity -> mapper.map(entity, new TaskDto()))
                 .collect(Collectors.toList());
+
     }
 
     @Override
@@ -273,4 +278,50 @@ public class TaskServiceImpl implements TaskService {
                 .map(taskEntity -> mapper.map(taskEntity, new TaskDto())).collect(Collectors.toList());
     }
 
+    @Override
+    public Map<String, List<TaskDto>> getUsersTasksInProject(String userId, String projectId, Sort sort) {
+        final ProjectEntity projectEntity = projectService.findEntityById(projectId);
+        final UserEntity userEntity = userService.findEntityById(userId);
+        final List<TaskDto> tasksByUserAndProject = findAllByUserAndProject(userEntity, projectEntity, sort);
+        final HashMap<String, List<TaskDto>> taskMap = new HashMap<>();
+        if (sort.toString().equals("priority: DESC")) {
+            tasksByUserAndProject.sort(new TaskPriorityComparator());
+        }
+        taskMap.put(CREATED, new ArrayList<>());
+        taskMap.put(TaskState.TODO.toString(), new ArrayList<>());
+        taskMap.put(TaskState.IN_PROGRESS.toString(), new ArrayList<>());
+        taskMap.put(TaskState.DONE.toString(), new ArrayList<>());
+
+        sortTasksInMapByStateOrCreator(userId, tasksByUserAndProject, taskMap);
+
+        return taskMap;
+    }
+
+    private void sortTasksInMapByStateOrCreator(String userId, List<TaskDto> tasksByUserAndProject,
+                                                Map<String, List<TaskDto>> taskMap) {
+        tasksByUserAndProject.forEach(taskDto -> {
+            if (taskDto.getCreatorId().equals(userId)) {
+                taskMap.get(CREATED).add(taskDto);
+            }
+
+            switch (taskDto.getTaskState()) {
+                case TODO: {
+                    taskMap.get(TaskState.TODO.toString()).add(taskDto);
+                    break;
+                }
+                case IN_PROGRESS: {
+                    taskMap.get(TaskState.IN_PROGRESS.toString()).add(taskDto);
+                    break;
+                }
+                case DONE: {
+                    taskMap.get(TaskState.DONE.toString()).add(taskDto);
+                    break;
+                }
+                default:
+                    throw new IllegalArgumentException(
+                            "unexpected value in enum: TaskState. value is " + taskDto.getTaskState());
+            }
+
+        });
+    }
 }

@@ -25,7 +25,7 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
             "AND " +
             "(t.assignedUserEntity=:userEntity OR t.creatorUserEntity=:userEntity)) ")
     List<TaskEntity> findAllByUserAndProject(@Param("userEntity") UserEntity userEntity,
-                                             @Param("projectEntity") ProjectEntity projectEntity);
+                                             @Param("projectEntity") ProjectEntity projectEntity, Sort sort);
 
     List<TaskEntity> findAllByParent(TaskEntity parent);
 

@@ -16,4 +16,6 @@ public class CommentDto {
 
     private LocalDateTime createdAt;
 
+    private String[] notificationUsers;
+
 }

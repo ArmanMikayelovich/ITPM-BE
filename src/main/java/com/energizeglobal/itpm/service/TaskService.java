@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface TaskService {
@@ -29,9 +30,9 @@ public interface TaskService {
 
     void remove(Long taskId);
 
-    List<TaskDto> findAllByUserAndProject(UserEntity userEntity, ProjectEntity projectEntity);
-
     void changeTaskPriority(TaskDto taskDto);
+
+    List<TaskDto> findAllByUserAndProject(UserEntity userEntity, ProjectEntity projectEntity, Sort sort);
 
     String[] parseStringToArray(String str);
 
@@ -51,4 +52,6 @@ public interface TaskService {
     void detachTaskFromSprint(Long taskId);
 
     List<TaskDto> findAllBySprintId(Long sprintId);
+
+    Map<String, List<TaskDto>> getUsersTasksInProject(String userId, String projectId, Sort sort);
 }

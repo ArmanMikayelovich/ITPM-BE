@@ -2,6 +2,7 @@ package com.energizeglobal.itpm.service;
 
 import com.energizeglobal.itpm.model.ProjectEntity;
 import com.energizeglobal.itpm.model.dto.ProjectDto;
+import com.energizeglobal.itpm.model.dto.UserProjectDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,4 +21,5 @@ public interface ProjectService {
 
     Page<ProjectDto> findAllByAssignedUserId(String userId, Pageable pageable);
 
+    void attachUserToProject(UserProjectDto userProjectDto);
 }

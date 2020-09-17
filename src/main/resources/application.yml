@@ -30,3 +30,8 @@ spring:
           google:
             client-id: 266993385066-ekla97k3gj56nlf5q4b8r04loa15e4io.apps.googleusercontent.com
             client-secret: hoouT_GStlDN4bjs9IisBGtx
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: egsians
+    password: egsians9999
