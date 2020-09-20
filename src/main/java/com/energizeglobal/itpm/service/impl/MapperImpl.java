@@ -246,4 +246,14 @@ public class MapperImpl implements Mapper {
         versionDto.setRegistrationDate(versionEntity.getRegistrationDate());
         return versionDto;
     }
+
+
+    @Override
+    public FileInfoDto map(FileInfoEntity fileInfoEntity, FileInfoDto fileInfoDto) {
+        fileInfoDto.setId(fileInfoEntity.getId());
+        fileInfoDto.setFileName(fileInfoEntity.getFileName());
+        fileInfoDto.setCreatedAt(fileInfoEntity.getCreatedAt());
+        fileInfoDto.setTaskId(fileInfoEntity.getOwnerTaskEntity().getId());
+        return fileInfoDto;
+    }
 }

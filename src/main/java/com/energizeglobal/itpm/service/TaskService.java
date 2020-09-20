@@ -7,7 +7,6 @@ import com.energizeglobal.itpm.model.dto.TaskDto;
 import com.energizeglobal.itpm.model.enums.TaskState;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,7 @@ public interface TaskService {
 
     List<TaskDto> findAllBySprintAndState(Long sprintId, TaskState taskState);
 
-    void addTaskToSprint(TaskDto taskDto, MultipartFile[] uploadedFiles);
+  TaskDto addTaskToSprint(TaskDto taskDto);
 
     void attachTaskToUser(Long taskId, String userId);
 

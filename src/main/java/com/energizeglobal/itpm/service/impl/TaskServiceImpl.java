@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -74,12 +73,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void addTaskToSprint(TaskDto taskDto, MultipartFile[] uploadedFiles) {
+    public TaskDto addTaskToSprint(TaskDto taskDto) {
         taskDto.setId(null);
         log.trace("Adding task to Sprint: " + taskDto);
         final TaskEntity mappedTaskEntity = mapper.map(taskDto, new TaskEntity());
         final TaskEntity saved = taskRepository.save(mappedTaskEntity);
         log.trace("Task " + saved + "successfully attached to Sprint");
+        return mapper.map(saved, taskDto);
     }
 
     @Override

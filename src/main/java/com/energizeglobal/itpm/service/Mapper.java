@@ -35,4 +35,5 @@ public interface Mapper {
 
     ProjectVersionDto map(ProjectVersionEntity versionEntity, ProjectVersionDto versionDto);
 
+    FileInfoDto map(FileInfoEntity fileInfoEntity, FileInfoDto fileInfoDto);
 }

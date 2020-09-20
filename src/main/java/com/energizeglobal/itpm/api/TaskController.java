@@ -1,7 +1,9 @@
 package com.energizeglobal.itpm.api;
 
+import com.energizeglobal.itpm.model.dto.FileInfoDto;
 import com.energizeglobal.itpm.model.dto.TaskDto;
 import com.energizeglobal.itpm.model.enums.TaskState;
+import com.energizeglobal.itpm.service.FileService;
 import com.energizeglobal.itpm.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -20,6 +23,7 @@ public class TaskController {
     private static final Logger log = Logger.getLogger(TaskController.class);
 
     private final TaskService taskService;
+    private final FileService fileService;
 
     @GetMapping(value = "/{taskId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public TaskDto findById(@PathVariable("taskId") Long taskId) {
@@ -41,15 +45,35 @@ public class TaskController {
     }
 
 
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public void createTask(TaskDto taskDto, MultipartFile[] uploadedFiles) {
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public TaskDto createTask(@RequestBody TaskDto taskDto) {
         log.trace("adding task in sprint: " + taskDto);
-        taskService.addTaskToSprint(taskDto, uploadedFiles);
+        return taskService.addTaskToSprint(taskDto);
+    }
+
+    @PostMapping(value = "/{taskId}/upload-file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void attachFile(MultipartFile file, @PathVariable Long taskId) {
+        fileService.saveFile(file, taskId);
+    }
+
+    @GetMapping(value = "/{taskId}/get-files", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<FileInfoDto> getFileInfosOfTask(@PathVariable("taskId") Long taskId) {
+        return fileService.getAllByTaskId(taskId);
+    }
+
+    @GetMapping(value = "/{taskId}/get-files/{fileId}")
+    public byte[] getFileById(@PathVariable Long taskId, @PathVariable Long fileId, HttpServletResponse response) {
+        log.trace("searching file of task: " + taskId + " with file id: " + fileId);
+        final byte[] file = fileService.getFile(fileId);
+        final FileInfoDto infoDto = fileService.findById(fileId);
+        response.addHeader("Content-Disposition", "attachment; filename=" + infoDto.getFileName());
+        return file;
     }
 
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void updateTask(@RequestBody TaskDto taskDto) {
+
         log.trace("updating task: " + taskDto);
         taskService.changeTask(taskDto);
     }
