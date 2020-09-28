@@ -73,7 +73,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public TaskDto addTaskToSprint(TaskDto taskDto) {
+    public TaskDto addTask(TaskDto taskDto) {
         taskDto.setId(null);
         log.trace("Adding task to Sprint: " + taskDto);
         final TaskEntity mappedTaskEntity = mapper.map(taskDto, new TaskEntity());
@@ -135,12 +135,6 @@ public class TaskServiceImpl implements TaskService {
 
     }
 
-    @Override
-    public String[] parseStringToArray(String str) {
-        String parsed = str.replace("[", "");
-        parsed = parsed.replace("]", "");
-        return Arrays.stream(parsed.split(",")).toArray(String[]::new);
-    }
 
     @Override
     @Transactional
@@ -226,14 +220,14 @@ public class TaskServiceImpl implements TaskService {
 
         taskEntity.setProjectEntity(newProject);
         taskEntity.setProjectVersionEntity(newProjectVersion);
-        taskEntity.setAffectedProjectVersions("");
+        taskEntity.setAffectedProjectVersions(new ArrayList<>());
         taskEntity.setTriggeredBy(null);
         taskEntity.setTriggerType(null);
 
         for (TaskEntity child : children) {
             child.setProjectEntity(newProject);
             child.setProjectVersionEntity(newProjectVersion);
-            child.setAffectedProjectVersions("");
+            child.setAffectedProjectVersions(new ArrayList<>());
             child.setTriggeredBy(null);
             child.setTriggerType(null);
         }
@@ -324,4 +318,5 @@ public class TaskServiceImpl implements TaskService {
 
         });
     }
+
 }

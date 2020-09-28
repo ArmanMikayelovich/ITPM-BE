@@ -2,12 +2,15 @@ package com.energizeglobal.itpm.service.impl;
 
 import com.energizeglobal.itpm.model.*;
 import com.energizeglobal.itpm.model.dto.*;
+import com.energizeglobal.itpm.repository.ProjectVersionRepository;
 import com.energizeglobal.itpm.service.*;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -18,19 +21,22 @@ public class MapperImpl implements Mapper {
     private final TaskService taskService;
     private final ProjectService projectService;
     private final ProjectVersionService projectVersionService;
+    private final ProjectVersionRepository projectVersionRepository;
 
 
     public MapperImpl(@Lazy UserService userService,
                       @Lazy SprintService sprintService,
                       @Lazy TaskService taskService,
                       @Lazy ProjectService projectService,
-                      @Lazy ProjectVersionService projectVersionService) {
+                      @Lazy ProjectVersionService projectVersionService,
+                      ProjectVersionRepository projectVersionRepository) {
 
         this.userService = userService;
         this.sprintService = sprintService;
         this.taskService = taskService;
         this.projectService = projectService;
         this.projectVersionService = projectVersionService;
+        this.projectVersionRepository = projectVersionRepository;
     }
 
     @Override
@@ -145,8 +151,10 @@ public class MapperImpl implements Mapper {
         taskEntity.setProjectVersionEntity(projectVersionService
                 .findEntityById(taskDto.getProjectVersionId()));
 
-        if (taskDto.getAffectedProjectVersions() != null) {
-            taskEntity.setAffectedProjectVersions(Arrays.toString(taskDto.getAffectedProjectVersions()));
+        if (taskDto.getAffectedProjectVersions() != null && taskDto.getAffectedProjectVersions().length != 0) {
+            final List<Long> projectIdList = Arrays.stream(taskDto.getAffectedProjectVersions()).map(Long::valueOf).collect(Collectors.toList());
+            final List<ProjectVersionEntity> versionEntityList = projectVersionRepository.findAllById(projectIdList);
+            taskEntity.setAffectedProjectVersions(versionEntityList);
         }
 
         if (taskDto.getParentId() != null) {
@@ -181,13 +189,14 @@ public class MapperImpl implements Mapper {
         taskDto.setPriority(taskEntity.getPriority());
         taskDto.setProjectVersionId(taskEntity.getProjectVersionEntity().getId());
 
-        if (taskEntity.getAffectedProjectVersions() != null &&
-                !taskEntity.getAffectedProjectVersions().isEmpty()) {
+        if (!taskEntity.getAffectedProjectVersions().isEmpty()) {
 
             taskDto.setAffectedProjectVersions(
-                    taskService.parseStringToArray(
-                            taskEntity.getAffectedProjectVersions()
-                    )
+                    taskEntity
+                            .getAffectedProjectVersions()
+                            .stream()
+                            .map(projectVersionEntity -> "" + projectVersionEntity.getId())
+                            .toArray(String[]::new)
             );
         }
 
@@ -249,11 +258,11 @@ public class MapperImpl implements Mapper {
 
 
     @Override
-    public FileInfoDto map(FileInfoEntity fileInfoEntity, FileInfoDto fileInfoDto) {
-        fileInfoDto.setId(fileInfoEntity.getId());
-        fileInfoDto.setFileName(fileInfoEntity.getFileName());
-        fileInfoDto.setCreatedAt(fileInfoEntity.getCreatedAt());
-        fileInfoDto.setTaskId(fileInfoEntity.getOwnerTaskEntity().getId());
+    public FileInfoDto map(FileEntity fileEntity, FileInfoDto fileInfoDto) {
+        fileInfoDto.setId(fileEntity.getId());
+        fileInfoDto.setFileName(fileEntity.getFileName());
+        fileInfoDto.setCreatedAt(fileEntity.getCreatedAt());
+        fileInfoDto.setTaskId(fileEntity.getOwnerTaskEntity().getId());
         return fileInfoDto;
     }
 }

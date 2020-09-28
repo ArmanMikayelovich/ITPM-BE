@@ -21,7 +21,7 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
     List<TaskEntity> findAllBySprintEntity(SprintEntity sprintEntity);
 
     @Query("select t from TaskEntity t " +
-            "where (t.sprintEntity.projectEntity=:projectEntity " +
+            "where (t.projectEntity=:projectEntity " +
             "AND " +
             "(t.assignedUserEntity=:userEntity OR t.creatorUserEntity=:userEntity)) ")
     List<TaskEntity> findAllByUserAndProject(@Param("userEntity") UserEntity userEntity,

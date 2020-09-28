@@ -10,6 +10,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @XmlRootElement
@@ -63,8 +65,14 @@ public class TaskEntity {
     @JoinColumn(name = "fk_project_version_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private ProjectVersionEntity projectVersionEntity;
 
-    @Column(columnDefinition = "longtext")
-    private String affectedProjectVersions;
+
+    @ManyToMany
+    @JoinTable(
+            name = "task_project_versions",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "version_id"))
+    List<ProjectVersionEntity> affectedProjectVersions = new ArrayList<>();
+
 
     //    @Column(name = "parent_id")
     @ManyToOne(fetch = FetchType.LAZY)

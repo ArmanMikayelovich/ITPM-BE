@@ -19,7 +19,7 @@ public interface TaskService {
 
     List<TaskDto> findAllBySprintAndState(Long sprintId, TaskState taskState);
 
-  TaskDto addTaskToSprint(TaskDto taskDto);
+  TaskDto addTask(TaskDto taskDto);
 
     void attachTaskToUser(Long taskId, String userId);
 
@@ -32,8 +32,6 @@ public interface TaskService {
     void changeTaskPriority(TaskDto taskDto);
 
     List<TaskDto> findAllByUserAndProject(UserEntity userEntity, ProjectEntity projectEntity, Sort sort);
-
-    String[] parseStringToArray(String str);
 
     List<TaskDto> findAllSubTasks(Long taskId);
 
@@ -53,4 +51,6 @@ public interface TaskService {
     List<TaskDto> findAllBySprintId(Long sprintId);
 
     Map<String, List<TaskDto>> getUsersTasksInProject(String userId, String projectId, Sort sort);
+
+
 }

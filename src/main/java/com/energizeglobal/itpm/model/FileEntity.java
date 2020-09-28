@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "file_info")
 @Getter
 @Setter
-public class FileInfoEntity {
+public class FileEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,9 +20,6 @@ public class FileInfoEntity {
 
     @Column(name = "file_name")
     private String fileName;
-
-    @Column(name = "file_path")
-    private String filePath;
 
     @CreationTimestamp
     @Column(name = "upload_timestamp", updatable = false)
@@ -34,4 +31,9 @@ public class FileInfoEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id")
     private TaskEntity ownerTaskEntity;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] file;
+
 }

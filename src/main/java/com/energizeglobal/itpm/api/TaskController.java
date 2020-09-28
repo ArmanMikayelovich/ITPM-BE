@@ -48,12 +48,17 @@ public class TaskController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public TaskDto createTask(@RequestBody TaskDto taskDto) {
         log.trace("adding task in sprint: " + taskDto);
-        return taskService.addTaskToSprint(taskDto);
+        return taskService.addTask(taskDto);
     }
 
     @PostMapping(value = "/{taskId}/upload-file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void attachFile(MultipartFile file, @PathVariable Long taskId) {
         fileService.saveFile(file, taskId);
+    }
+
+    @DeleteMapping(value = "/{taskId}/delete-file/{fileId}")
+    public void deleteFile(@PathVariable Long taskId, @PathVariable Long fileId) {
+        fileService.deleteFile(fileId);
     }
 
     @GetMapping(value = "/{taskId}/get-files", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -71,7 +76,7 @@ public class TaskController {
     }
 
 
-    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public void updateTask(@RequestBody TaskDto taskDto) {
 
         log.trace("updating task: " + taskDto);
