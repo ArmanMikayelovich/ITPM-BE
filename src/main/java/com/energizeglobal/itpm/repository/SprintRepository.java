@@ -17,4 +17,8 @@ public interface SprintRepository extends JpaRepository<SprintEntity, Long> {
     Optional<SprintEntity> findByProjectEntityAndIsRunningTrue(ProjectEntity projectEntity);
 
     List<SprintEntity> findAllByProjectEntityAndIsFinishedFalse(ProjectEntity projectEntity);
+
+    List<SprintEntity> findAllByNameContains(String searchString);
+
+    List<SprintEntity> findAllByNameContainsAndProjectEntity(String text, ProjectEntity projectEntity);
 }

@@ -53,4 +53,7 @@ public interface TaskService {
     Map<String, List<TaskDto>> getUsersTasksInProject(String userId, String projectId, Sort sort);
 
 
+    List<TaskDto> search(String searchString);
+
+    List<TaskDto> searchInProject(String text, String projectId);
 }

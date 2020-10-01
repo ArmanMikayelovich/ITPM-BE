@@ -121,4 +121,22 @@ public class SprintServiceImpl implements SprintService {
                 .stream().map(sprintEntity -> mapper.map(sprintEntity, new SprintDto()))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<SprintDto> search(String searchText) {
+        return sprintRepository.findAllByNameContains(searchText)
+                .stream().map(sprintEntity -> mapper.map(sprintEntity, new SprintDto()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SprintDto> searchInProject(String searchText, String projectId) {
+        final ProjectEntity projectEntity = projectService.findEntityById(projectId);
+
+        return sprintRepository.findAllByNameContainsAndProjectEntity(searchText, projectEntity)
+                .stream().map(sprintEntity -> mapper.map(sprintEntity, new SprintDto()))
+                .collect(Collectors.toList());
+    }
 }
+
+

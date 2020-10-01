@@ -319,4 +319,16 @@ public class TaskServiceImpl implements TaskService {
         });
     }
 
+    @Override
+    public List<TaskDto> search(String searchString) {
+        return taskRepository.findAllByNameContains(searchString)
+                .stream().map(taskEntity -> mapper.map(taskEntity, new TaskDto())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TaskDto> searchInProject(String text, String projectId) {
+        final ProjectEntity projectEntity = projectService.findEntityById(projectId);
+        return taskRepository.findAllByNameContainsAndProjectEntity(text, projectEntity)
+                .stream().map(taskEntity -> mapper.map(taskEntity, new TaskDto())).collect(Collectors.toList());
+    }
 }

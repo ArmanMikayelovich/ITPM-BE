@@ -32,7 +32,8 @@ public class UserController {
     //EXAMPLE
 // TODO DELETE AFTER INVESTIGATING
     @GetMapping("/user")
-    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
+    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal, HttpServletRequest request) {
+
         return Collections.singletonMap("name", principal.getAttribute("name"));
     }
 

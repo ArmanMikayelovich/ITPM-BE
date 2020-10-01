@@ -33,4 +33,7 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
 
     List<TaskEntity> findAllByProjectEntityAndSprintEntityNull(ProjectEntity projectEntity, Sort sort);
 
+    List<TaskEntity> findAllByNameContains(String searchString);
+
+    List<TaskEntity> findAllByNameContainsAndProjectEntity(String text, ProjectEntity project);
 }

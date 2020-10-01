@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -165,5 +166,24 @@ public class UserServiceImpl implements UserService {
             log.warn("User with email:" + email + " not found.");
             throw new NotFoundException("User with id: " + email + " not found.");
         });
+    }
+
+    @Override
+    public List<UserDto> search(String searchString) {
+        return userRepository
+                .findAllByFirstNameContainsOrLastNameContainsOrEmailContains(searchString, searchString, searchString)
+                .stream()
+                .map(userEntity -> mapper.map(userEntity, new UserDto())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDto> searchInProject(String searchString, String projectId) {
+        final ProjectEntity projectEntity = projectService.findEntityById(projectId);
+        return userProjectRepository
+                .findAllBySearchTextAndProject(searchString, projectEntity)
+                .stream()
+                .map(UserProjectEntity::getUserEntity)
+                .map(userEntity -> mapper.map(userEntity, new UserDto()))
+                .collect(Collectors.toList());
     }
 }

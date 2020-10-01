@@ -29,4 +29,8 @@ public interface UserService {
     void sendMailNotificationOfComment(String userId, Long taskId);
 
     UserEntity findByEmail(String email);
+
+    List<UserDto> search(String searchString);
+
+    List<UserDto> searchInProject(String searchString, String projectId);
 }

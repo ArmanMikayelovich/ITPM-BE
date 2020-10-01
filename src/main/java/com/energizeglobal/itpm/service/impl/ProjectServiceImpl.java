@@ -20,7 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -115,4 +117,11 @@ public class ProjectServiceImpl implements ProjectService {
         userProjectEntity.setRole(userProjectDto.getRole());
         userProjectRepository.save(userProjectEntity);
     }
+
+    @Override
+    public List<ProjectDto> search(String text) {
+        return projectRepository.findAllByNameContainsOrIdContains(text, text).stream()
+                .map(projectEntity -> mapper.map(projectEntity, new ProjectDto())).collect(Collectors.toList());
+    }
+
 }

@@ -27,4 +27,8 @@ public interface SprintService {
     SprintDto findById(Long sprintId);
 
     List<SprintDto> findAllSprintWhichNotFinished(String projectId);
+
+    List<SprintDto> search(String searchText);
+
+    List<SprintDto> searchInProject(String searchText, String projectId);
 }
