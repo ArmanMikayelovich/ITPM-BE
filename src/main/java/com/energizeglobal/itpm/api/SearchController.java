@@ -10,6 +10,7 @@ import com.energizeglobal.itpm.service.TaskService;
 import com.energizeglobal.itpm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +32,8 @@ public class SearchController {
     private final ProjectService projectService;
     private final SprintService sprintService;
 
+
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Set> search(@RequestParam("searchText") String searchText, @RequestParam(required = false) String projectId) {
         final String[] searchTexts = searchText.trim().split(" ");

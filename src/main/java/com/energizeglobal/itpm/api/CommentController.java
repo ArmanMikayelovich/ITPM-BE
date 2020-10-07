@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -20,12 +21,14 @@ public class CommentController {
     private final CommentService commentService;
     private final UserService userService;
 
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/comments/{commentId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public CommentDto findById(@PathVariable("commentId") Long commentId) {
         log.trace("Searching comment by id: " + commentId);
         return commentService.findById(commentId);
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "{tasksId}/comments", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<CommentDto> findAllByTaskId(@PathVariable("tasksId") Long tasksId,
                                             @RequestParam(required = false) Pageable pageable) {
@@ -33,7 +36,7 @@ public class CommentController {
         return commentService.findAllByTaskId(tasksId, pageable);
     }
 
-
+    @PreAuthorize(value = "isAuthenticated()")
     @PostMapping(value = "/{taskId}/comments",
             consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void addComment(@PathVariable("taskId") Long taskId, @RequestBody CommentDto commentDto) {
@@ -47,6 +50,7 @@ public class CommentController {
 
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @PutMapping(value = "/{taskId}/comments",
             consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void updateComment(@PathVariable("taskId") Long taskId, @RequestBody CommentDto commentDto) {
@@ -55,7 +59,7 @@ public class CommentController {
         commentService.updateComment(commentDto);
     }
 
-
+    @PreAuthorize(value = "isAuthenticated()")
     @DeleteMapping(value = "/comments/{commentId}")
     public void delete(@PathVariable("commentId") Long commentId) {
         log.trace("Removing comment: " + commentId);

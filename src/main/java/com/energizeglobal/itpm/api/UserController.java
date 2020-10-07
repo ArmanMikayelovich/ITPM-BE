@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -29,12 +31,16 @@ public class UserController {
     private final UserService userService;
     private final TaskService taskService;
 
-    //EXAMPLE
-// TODO DELETE AFTER INVESTIGATING
     @GetMapping("/user")
-    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal, HttpServletRequest request) {
+    @PreAuthorize(value = "isAuthenticated()")
+    public Map<String, Object> user(@AuthenticationPrincipal AuthenticatedPrincipal principal, HttpServletRequest request) {
 
-        return Collections.singletonMap("name", principal.getAttribute("name"));
+        return Collections.singletonMap("name", principal);
+    }
+
+    @GetMapping("/user-info")
+    public AuthenticatedPrincipal userInfo(@AuthenticationPrincipal OAuth2User principal) {
+        return principal;
     }
 
     @GetMapping("/error")
@@ -44,7 +50,7 @@ public class UserController {
         return message;
     }
 
-
+    @PreAuthorize(value = "isAuthenticated()")
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void createUser(@RequestBody UserDto userDto) {
         log.trace("creating user:" + userDto);
@@ -52,6 +58,7 @@ public class UserController {
         log.trace("user created:" + userDto);
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void updateUser(@RequestBody UserDto userDto) {
         log.trace("updating user:" + userDto);
@@ -60,12 +67,14 @@ public class UserController {
 
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public UserDto findById(@PathVariable("userId") String userId) {
         log.trace("searching user by id: " + userId);
         return userService.findById(userId);
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @PutMapping(value = "/activation")
     public void changeActivation(@RequestParam("userId") String userId,
                                  @RequestParam("status") Boolean status) {
@@ -73,6 +82,7 @@ public class UserController {
         userService.changeActivationStatus(userId, status);
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/by-project/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<UserProjectDto> findAllByProjectId(@PathVariable("projectId") String projectId,
                                                    @RequestParam(required = false) final Pageable pageable) {
@@ -80,11 +90,13 @@ public class UserController {
         return userService.findAllUsersByProject(projectId, pageable);
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/{userId}/projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserProjectDto> findAllProjectsOfUser(@PathVariable("userId") String userId) {
         return userService.findAllProjectsOfUser(userId);
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/{userId}/projects/{projectId}/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<TaskDto>> getUserTasksInProject(@PathVariable("userId") String userId,
                                                             @PathVariable("projectId") String projectId,

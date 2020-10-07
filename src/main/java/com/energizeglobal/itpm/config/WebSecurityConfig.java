@@ -1,11 +1,12 @@
 package com.energizeglobal.itpm.config;
 
-import com.energizeglobal.itpm.repository.UserRepository;
+import com.energizeglobal.itpm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,17 +23,21 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     private static final Logger log = Logger.getLogger(WebSecurityConfig.class);
-    private static final String GITHUB_REG_ID = "github";
-    private static final String GOOGLE_REG_ID = "z";
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests(a -> a
-                                .anyRequest().permitAll()
+                .authorizeRequests(a -> {
+                            a.anyRequest().permitAll();
+                        }
                 )
                 .logout(l -> l.logoutSuccessUrl("/").permitAll()
                 ).csrf().disable()
@@ -42,7 +47,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .oauth2Login();
 
         http
-
                 .oauth2Login(o -> {
 
                             o

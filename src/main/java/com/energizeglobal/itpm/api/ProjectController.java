@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class ProjectController {
     private final ProjectService projectService;
     private final ProjectVersionService versionService;
 
+    @PreAuthorize(value = "isAuthenticated()")
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,})
     public void createProject(@RequestBody ProjectDto projectDto) {
         log.trace("creating project: " + projectDto);
@@ -33,6 +35,7 @@ public class ProjectController {
 
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void updateProject(@RequestBody ProjectDto projectDto) {
         log.trace("updating project: " + projectDto);
@@ -40,6 +43,7 @@ public class ProjectController {
         log.trace("project updated : " + projectDto);
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/by-id/{projectId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ProjectDto findById(@PathVariable("projectId") String projectId) {
         log.trace("Searching project by id: " + projectId);
@@ -48,6 +52,7 @@ public class ProjectController {
         return byId;
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @DeleteMapping(value = "/{projectId}")
     public void delete(@PathVariable("projectId") String projectId) {
         projectService.removeProject(projectId);
@@ -55,12 +60,14 @@ public class ProjectController {
 
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/by-user/{userId}")
     public Page<ProjectDto> findAllByUser(@PathVariable("userId") String userId, @RequestParam(required = false) final Pageable pageable) {
         log.trace("searching projects by userId: " + userId + " || pageable: " + pageable);
         return projectService.findAllByAssignedUserId(userId, pageable);
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/{projectId}/versions")
     public List<ProjectVersionDto> getProjectVersions(@PathVariable("projectId") String projectId,
                                                       @RequestParam(required = false) ProjectVersionStatus status,
@@ -75,11 +82,13 @@ public class ProjectController {
         }
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @PostMapping(value = "/attach-user-to-project", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void attachUserToProject(@RequestBody UserProjectDto userProjectDto) {
         projectService.attachUserToProject(userProjectDto);
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping(value = "/versions/{versionId}")
     public ProjectVersionDto getProjectVersionById(@PathVariable Long versionId) {
 
@@ -87,7 +96,7 @@ public class ProjectController {
         return versionService.findById(versionId);
     }
 
-
+    @PreAuthorize(value = "isAuthenticated()")
     @PostMapping(value = "/{projectId}/versions")
     public void addProjectVersion(@RequestBody ProjectVersionDto versionDto,
                                   @PathVariable("projectId") String projectId) {
@@ -98,6 +107,7 @@ public class ProjectController {
         versionService.createNewVersion(versionDto);
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @PutMapping(value = "/{projectId}/versions")
     public void updateProjectVersion(@RequestBody ProjectVersionDto versionDto,
                                      @PathVariable("projectId") String projectId) {
@@ -107,6 +117,7 @@ public class ProjectController {
         versionService.update(versionDto);
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @DeleteMapping(value = "/{projectId}/versions")
     public void remove(@RequestParam Long versionId, @PathVariable String projectId) {
         log.trace("deleting project version with id : " + versionId);
