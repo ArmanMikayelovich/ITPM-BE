@@ -1,9 +1,6 @@
 package com.energizeglobal.itpm.service.impl;
 
-import com.energizeglobal.itpm.model.ProjectEntity;
-import com.energizeglobal.itpm.model.TaskEntity;
-import com.energizeglobal.itpm.model.UserEntity;
-import com.energizeglobal.itpm.model.UserProjectEntity;
+import com.energizeglobal.itpm.model.*;
 import com.energizeglobal.itpm.model.dto.UserDto;
 import com.energizeglobal.itpm.model.dto.UserProjectDto;
 import com.energizeglobal.itpm.repository.UserProjectRepository;
@@ -22,10 +19,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -146,14 +146,12 @@ public class UserServiceImpl implements UserService {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(email);
         simpleMailMessage.setSubject("Notification from ITPM");
-        String mailMessage = new StringBuilder("Dear ")
-                .append(userEntity.getFirstName()).append(" ").append(userEntity.getLastName()).append(".")
-
-                .append("\n You have noticed because of noted in comments of task:").append(taskEntity.getName())
-
-                .append(". Project: ").append(taskEntity.getProjectEntity().getName())
-                .append("\n Best regards.")
-                .append("\n ITPM team.").toString();
+        String mailMessage = "Dear " +
+                userEntity.getFirstName() + " " + userEntity.getLastName() + "." +
+                "\n You have noticed because of noted in comments of task:" + taskEntity.getName() +
+                ". Project: " + taskEntity.getProjectEntity().getName() +
+                "\n Best regards." +
+                "\n ITPM team.";
 
         simpleMailMessage.setText(mailMessage);
         javaMailSender.send(simpleMailMessage);
@@ -186,4 +184,41 @@ public class UserServiceImpl implements UserService {
                 .map(userEntity -> mapper.map(userEntity, new UserDto()))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional
+    public CustomOAuth2User processOAuth2User(OAuth2User oAuth2User) {
+        CustomOAuth2User customOAuth2User;
+        userRepository.findByEmail(oAuth2User.getAttribute("email"));
+        final String email = ((String) Objects.requireNonNull(oAuth2User.getAttribute("email"))).toLowerCase();
+        final Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
+        if (!optionalUser.isPresent()) {
+            final UserEntity userEntity = new UserEntity();
+            userEntity.setEmail(email);
+            userEntity.setPassword("");
+            parseNameFromOAuth2User(oAuth2User, userEntity);
+            userEntity.setId(email.replace("@", "!"));
+            final UserEntity saved = userRepository.save(userEntity);
+            customOAuth2User = new CustomOAuth2User(oAuth2User, oAuth2User.getAuthorities());
+            customOAuth2User.setEmail(saved.getEmail());
+            customOAuth2User.setId(saved.getId());
+        } else {
+            customOAuth2User = new CustomOAuth2User(oAuth2User, oAuth2User.getAuthorities());
+            final UserEntity userEntity = optionalUser.get();
+            customOAuth2User.setEmail(userEntity.getEmail());
+            customOAuth2User.setId(userEntity.getId());
+        }
+        return customOAuth2User;
+    }
+
+    private void parseNameFromOAuth2User(OAuth2User user, UserEntity userEntity) {
+        final String fullName = user.getAttribute("name");
+        String[] names = Objects.requireNonNull(fullName).split(" ");
+        userEntity.setFirstName(names[0]);
+        final String[] lastNameArray = Arrays.copyOfRange(names, 1, names.length);
+        final String lastName = String.join(" ", lastNameArray);
+        userEntity.setLastName(lastName);
+    }
+
+
 }

@@ -76,8 +76,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return request -> {
             log.debug(request);
             OAuth2User user = delegate.loadUser(request);
-            return user;
+            userService.processOAuth2User(user);
 
+            return user;
         };
     }
 

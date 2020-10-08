@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
     private String id;
 
@@ -51,9 +50,16 @@ public class UserEntity {
     private List<ProjectEntity> ownProjects = new ArrayList<>();
 
     @Column(name = "is_active")
-    private Boolean isActive = false;
+    private Boolean isActive = true;
 
     //TODO add roles lastly
+    @ManyToMany
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    List<RoleEntity> roles = new ArrayList<>();
+
 
     @Override
     public boolean equals(Object o) {

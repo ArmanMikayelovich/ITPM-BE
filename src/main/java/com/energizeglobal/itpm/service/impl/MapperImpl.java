@@ -42,7 +42,7 @@ public class MapperImpl implements Mapper {
     @Override
     public UserEntity map(UserDto userDto, UserEntity userEntity) {
         userEntity.setId(userDto.getUserId());
-        userEntity.setEmail(userDto.getEmail());
+        userEntity.setEmail(userDto.getEmail().toLowerCase());
 
         userEntity.setFirstName(userDto.getFirstName());
         userEntity.setLastName(userDto.getLastName());
@@ -56,7 +56,7 @@ public class MapperImpl implements Mapper {
     @Override
     public UserDto map(UserEntity userEntity, UserDto userDto) {
         userDto.setUserId(userEntity.getId());
-        userDto.setEmail(userEntity.getEmail());
+        userDto.setEmail(userEntity.getEmail().toLowerCase());
         userDto.setFirstName(userEntity.getFirstName());
         userDto.setLastName(userEntity.getLastName());
         userDto.setIsActive(userEntity.getIsActive());
