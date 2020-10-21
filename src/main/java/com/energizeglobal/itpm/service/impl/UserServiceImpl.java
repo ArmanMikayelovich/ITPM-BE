@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -187,23 +188,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public CustomOAuth2User processOAuth2User(OAuth2User oAuth2User) {
+    public CustomOAuth2User processOAuth2User(OAuth2User user) {
         CustomOAuth2User customOAuth2User;
-        userRepository.findByEmail(oAuth2User.getAttribute("email"));
-        final String email = ((String) Objects.requireNonNull(oAuth2User.getAttribute("email"))).toLowerCase();
+        userRepository.findByEmail(user.getAttribute("email"));
+        final String email = ((String) Objects.requireNonNull(user.getAttribute("email"))).toLowerCase();
         final Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
         if (!optionalUser.isPresent()) {
             final UserEntity userEntity = new UserEntity();
             userEntity.setEmail(email);
             userEntity.setPassword("");
-            parseNameFromOAuth2User(oAuth2User, userEntity);
-            userEntity.setId(email.replace("@", "!"));
+            parseNameFromOAuth2User(user, userEntity);
+//            userEntity.setId(email.replace("@", "!"));
             final UserEntity saved = userRepository.save(userEntity);
-            customOAuth2User = new CustomOAuth2User(oAuth2User, oAuth2User.getAuthorities());
+            customOAuth2User = new CustomOAuth2User(user, user.getAuthorities());
             customOAuth2User.setEmail(saved.getEmail());
             customOAuth2User.setId(saved.getId());
         } else {
-            customOAuth2User = new CustomOAuth2User(oAuth2User, oAuth2User.getAuthorities());
+            customOAuth2User = new CustomOAuth2User(user, user.getAuthorities());
             final UserEntity userEntity = optionalUser.get();
             customOAuth2User.setEmail(userEntity.getEmail());
             customOAuth2User.setId(userEntity.getId());
@@ -220,5 +221,28 @@ public class UserServiceImpl implements UserService {
         userEntity.setLastName(lastName);
     }
 
-
+    @Override
+    public CustomOidcUser processOidcUser(OidcUser user) {
+        CustomOidcUser customOidcUser;
+        userRepository.findByEmail(user.getAttribute("email"));
+        final String email = ((String) Objects.requireNonNull(user.getAttribute("email"))).toLowerCase();
+        final Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
+        if (!optionalUser.isPresent()) {
+            final UserEntity userEntity = new UserEntity();
+            userEntity.setEmail(email);
+            userEntity.setPassword("");
+            parseNameFromOAuth2User(user, userEntity);
+//            userEntity.setId(email.replace("@", "!"));
+            final UserEntity saved = userRepository.save(userEntity);
+            customOidcUser = new CustomOidcUser(user.getAuthorities(), user.getIdToken());
+            customOidcUser.setEmail(saved.getEmail());
+            customOidcUser.setId(saved.getId());
+        } else {
+            customOidcUser = new CustomOidcUser(user.getAuthorities(), user.getIdToken());
+            final UserEntity userEntity = optionalUser.get();
+            customOidcUser.setEmail(userEntity.getEmail());
+            customOidcUser.setId(userEntity.getId());
+        }
+        return customOidcUser;
+    }
 }

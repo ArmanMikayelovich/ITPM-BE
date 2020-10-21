@@ -25,6 +25,6 @@ public class CustomOAuth2User extends DefaultOAuth2User {
      * @param authorities the authorities granted to the user
      */
     public CustomOAuth2User(OAuth2User user, Collection<? extends GrantedAuthority> authorities) {
-        super(authorities, user.getAttributes(), user.getName());
+        super(authorities, user.getAttributes(), "name");
     }
 }

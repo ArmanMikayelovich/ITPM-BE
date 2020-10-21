@@ -2,11 +2,10 @@ package com.energizeglobal.itpm.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.*;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDate;
@@ -26,6 +25,8 @@ public class UserEntity {
 
     @Id
     @Column(name = "id", updatable = false)
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
     @Column(name = "first_name")

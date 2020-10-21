@@ -1,5 +1,6 @@
 package com.energizeglobal.itpm.api;
 
+import com.energizeglobal.itpm.model.CustomOAuth2User;
 import com.energizeglobal.itpm.model.dto.TaskDto;
 import com.energizeglobal.itpm.model.dto.UserDto;
 import com.energizeglobal.itpm.model.dto.UserProjectDto;
@@ -18,7 +19,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -33,9 +33,9 @@ public class UserController {
 
     @GetMapping("/user")
     @PreAuthorize(value = "isAuthenticated()")
-    public Map<String, Object> user(@AuthenticationPrincipal AuthenticatedPrincipal principal, HttpServletRequest request) {
-
-        return Collections.singletonMap("name", principal);
+    public UserDto user(@AuthenticationPrincipal AuthenticatedPrincipal principal, HttpServletRequest request) {
+        final String userId = ((CustomOAuth2User) principal).getId();
+        return userService.findById(userId);
     }
 
     @GetMapping("/user-info")
