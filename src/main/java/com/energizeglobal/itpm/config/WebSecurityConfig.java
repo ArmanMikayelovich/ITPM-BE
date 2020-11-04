@@ -76,11 +76,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                                             request.getSession().setAttribute("error.message", exception.getMessage())
                                     );
                             o.successHandler((request, response, authentication) -> {
-                                response.sendRedirect("http://localhost:3000/");
+                                response.sendRedirect("http://localhost:3000/login");
                             });
                         }
 
                 );
+
 
     }
 

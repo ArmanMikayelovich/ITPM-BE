@@ -4,9 +4,9 @@ spring:
       max-file-size: 10MB
       max-request-size: 150MB
   datasource:
-    username: user
+    username: rootz`
     password: root
-    url: jdbc:mysql://mysql-standalone2:3306/itpm?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/itpm?createDatabaseIfNotExist=true
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -18,12 +18,12 @@ spring:
         use_query_cache: true
         use_second_level_cache: true
         format_sql: true
-
+        dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
-
     show-sql: true
     open-in-view: false
+    database: mysql
   security:
     oauth2:
       client:
