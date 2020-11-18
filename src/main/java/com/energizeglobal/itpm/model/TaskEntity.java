@@ -39,7 +39,7 @@ public class TaskEntity {
     @Enumerated(EnumType.STRING)
     private TaskPriority priority = TaskPriority.DEFAULT;
 
-    @Column(name = "description", length = 1500)
+    @Column(name = "description", length = 3500)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
